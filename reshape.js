@@ -157,23 +157,26 @@ function draw(){
       AmbientLight:true,//环境光是否开启
     }
     geometryGui = {
-      geometry_shininess:20,
+      geometry_shininess:100,
       material_color:0x000000,
+      material_specular:0x4499ff,
       material_wireframe:false,
       geometry_radius:10,
       geometry_tube:3,
       geometry_radialSegments:16,
       geometry_tubularSegments:100,
       geometry_arc:2*PI,
+
     };
 
     var datGui = new dat.GUI();
     //将设置属性添加到gui当中，gui.add(对象，属性，最小值，最大值）
-    datGui.add(gui,"PointLight").onChange(
+    var poi = datGui.addFolder( 'PointLight' );
+    poi.add(gui,"PointLight").onChange(
       function(){
         if(add_pointlight==false){
           point = new THREE.PointLight( 0xffffff, 1, 100);//第三个衰减距离
-          point.position.set( -20, 20, 20 );
+          point.position.set(  gui.light_pos_x,  gui.light_pos_y,  gui.light_pos_z );
           worScene.add( point );
           add_pointlight=true;
         }else{
@@ -182,16 +185,16 @@ function draw(){
         }
       }
     );
-    datGui.add(gui,"light_pos_x",-100,100);
-    datGui.add(gui,"light_pos_y",-100,100);
-    datGui.add(gui,"light_pos_z",-100,100);
-    //datGui.add(gui,"light_pos_d", 0,1);
+    poi.add(gui,"light_pos_x",-100,100);
+    poi.add(gui,"light_pos_y",-100,100);
+    poi.add(gui,"light_pos_z",-100,100);
     
-    datGui.add(gui,"SpotLight").onChange(
+    var spo = datGui.addFolder( 'SpotLight' );
+    spo.add(gui,"SpotLight").onChange(
       function(){
         if(add_spotlight==false){
           spot = new THREE.SpotLight( 0xffffff, 1, 200);
-          spot.position.set(40,20,30);
+          spot.position.set( gui.spot_pos_x, gui.spot_pos_y, gui.spot_pos_z);
           spot.castShadow = true;		
           worScene.add(spot);
           add_spotlight=true;
@@ -201,11 +204,12 @@ function draw(){
         }
       }
     );
-    datGui.add(gui,"spot_pos_x",-100,100);
-    datGui.add(gui,"spot_pos_y",-100,100);
-    datGui.add(gui,"spot_pos_z",-100,100);
+    spo.add(gui,"spot_pos_x",-100,100);
+    spo.add(gui,"spot_pos_y",-100,100);
+    spo.add(gui,"spot_pos_z",-100,100);
    
-    datGui.add(gui,"AmbientLight").onChange(
+    var amb = datGui.addFolder( 'AmbientLight' );
+    amb.add(gui,"AmbientLight").onChange(
       function(){
         if(add_ambientlight==false){
           ambientRed=new THREE.AmbientLight( 0xff0000 );
@@ -226,27 +230,31 @@ function draw(){
         }
       }
     );
-    datGui.add(gui,"ambientred_intensity",0,1);
-    datGui.add(gui,"ambientgreen_intensity",0,1);
-    datGui.add(gui,"ambientblue_intensity",0,1);
-   
+    amb.add(gui,"ambientred_intensity",0,1);
+    amb.add(gui,"ambientgreen_intensity",0,1);
+    amb.add(gui,"ambientblue_intensity",0,1);
    
     
-    var geoGui = new dat.GUI();
-    geoGui.add(geometryGui,"geometry_shininess",0,200);
-    geoGui.addColor(geometryGui,"material_color").onChange(
+    var  mat= datGui.addFolder( 'Material' );
+    mat.add(geometryGui,"geometry_shininess",0,200);
+    mat.addColor(geometryGui,"material_color").onChange(
       function(){
         material.emissive.set(geometryGui.material_color);
       }
     );
+    mat.addColor(geometryGui,"material_specular").onChange(
+      function(){
+        material.specular.set(geometryGui.material_specular);
+      }
+    );
 
     //开启线框模式
-    geoGui.add(geometryGui,"material_wireframe").onChange(
+    mat.add(geometryGui,"material_wireframe").onChange(
       function(){
         material.wireframe=geometryGui.material_wireframe;
       }
     );
-    geoGui.add(geometryGui,"geometry_radius",1,15).onChange(
+    mat.add(geometryGui,"geometry_radius",1,15).onChange(
       function(){
         if(geometryGui.material_wireframe==true){
           worScene.remove(geometry);
@@ -257,7 +265,7 @@ function draw(){
         }
       }
     );
-    geoGui.add(geometryGui,"geometry_tube",0.1,8).onChange(
+    mat.add(geometryGui,"geometry_tube",0.1,8).onChange(
       function(){
         if(geometryGui.material_wireframe==true){
           worScene.remove(geometry);      
@@ -268,7 +276,7 @@ function draw(){
         }
       }
     );
-    geoGui.add(geometryGui,"geometry_radialSegments",2,50).onChange(
+    mat.add(geometryGui,"geometry_radialSegments",2,50).onChange(
       function(){
         if(geometryGui.material_wireframe==true){
           worScene.remove(geometry);
@@ -279,7 +287,7 @@ function draw(){
         }
       }
     );
-    geoGui.add(geometryGui,"geometry_tubularSegments",3,300).onChange(
+    mat.add(geometryGui,"geometry_tubularSegments",3,300).onChange(
       function(){
         if(geometryGui.material_wireframe==true){
           worScene.remove(geometry);
@@ -290,7 +298,7 @@ function draw(){
         }
       }
     );
-    geoGui.add(geometryGui,"geometry_arc",0.1,2*PI).onChange(
+    mat.add(geometryGui,"geometry_arc",0.1,2*PI).onChange(
       function(){
         if(geometryGui.material_wireframe==true){
           worScene.remove(geometry);
@@ -313,8 +321,9 @@ function draw(){
       color: 0x4499ff,
       transparent:true,
       opacity:1,
-      shininess:20,
+      shininess:100,
       specular:0x4499ff,
+      reflectivity:0,
       emissive:0x000000,//发出的光,默认为黑色
       //wireframe:true,//线框模式
       emissiveIntensity:1,
@@ -593,6 +602,4 @@ function main(){
   //ring();
   draw();
 }
-
-
 
