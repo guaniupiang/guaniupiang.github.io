@@ -137,6 +137,7 @@ function draw(){
   function initGui(){
     //声明一个保存需求修改的相关数据的对象
     gui = {
+      point_color:0xffffff,
       light_pos_x:-20, //点光源向量x轴的位置
       light_pos_y:20, //点光源向量y轴的位置
       light_pos_z:20, //点光源向量z轴的位置
@@ -145,17 +146,19 @@ function draw(){
       spot_pos_x:40, //聚光灯向量x轴的位置
       spot_pos_y:40, //聚光灯向量y轴的位置
       spot_pos_z:40, //聚光灯向量z轴的位置
+      spot_intensity:1,//聚光灯光照强度
+      spot_angle:PI/4,//聚光灯散射角度，最大值为90度
+      spot_penumbra:0,//聚光灯的半影衰减百分比，在0和1之间
+      spot_decay:0, //聚光灯沿着光照距离的衰减量
 
       ambientred_intensity:0, //环境红光强度
       ambientgreen_intensity:0, //环境绿光强度
       ambientblue_intensity:0, //环境蓝光强度
 
-      //material_color:0x000000,
-
       PointLight:true,//点光源是否开启
       SpotLight:true,//聚光灯是否开启
       AmbientLight:true,//环境光是否开启
-    }
+    };
     geometryGui = {
       geometry_shininess:100,
       material_color:0x000000,
@@ -171,11 +174,11 @@ function draw(){
 
     var datGui = new dat.GUI();
     //将设置属性添加到gui当中，gui.add(对象，属性，最小值，最大值）
-    var poi = datGui.addFolder( 'PointLight' );
-    poi.add(gui,"PointLight").onChange(
+    var poi = datGui.addFolder( '点光源' );
+    poi.add(gui,"PointLight").name('开启点光源').onChange(
       function(){
         if(add_pointlight==false){
-          point = new THREE.PointLight( 0xffffff, 1, 100);//第三个衰减距离
+          point = new THREE.PointLight( gui.point_color, 1, 200);//第三个衰减距离
           point.position.set(  gui.light_pos_x,  gui.light_pos_y,  gui.light_pos_z );
           worScene.add( point );
           add_pointlight=true;
@@ -185,17 +188,38 @@ function draw(){
         }
       }
     );
-    poi.add(gui,"light_pos_x",-100,100);
-    poi.add(gui,"light_pos_y",-100,100);
-    poi.add(gui,"light_pos_z",-100,100);
+    poi.addColor(gui,"point_color").name('点光源颜色').onChange(
+      function(){
+        point.color.set(gui.point_color);
+      });
+    poi.add(gui,"light_pos_x",-100,100).name('x轴坐标').onChange(
+      function(){
+        point.position.x = gui.light_pos_x;
+      }
+    );
+    poi.add(gui,"light_pos_y",-100,100).name('y轴坐标').onChange(
+      function(){
+        point.position.y = gui.light_pos_y;
+      }
+    );
+    poi.add(gui,"light_pos_z",-100,100).name('z轴坐标').onChange(
+      function(){
+        point.position.z = gui.light_pos_z;
+      }
+    );
     
-    var spo = datGui.addFolder( 'SpotLight' );
-    spo.add(gui,"SpotLight").onChange(
+    var spo = datGui.addFolder( '聚光灯' );
+    spo.add(gui,"SpotLight").name('开启聚光灯').onChange(
       function(){
         if(add_spotlight==false){
-          spot = new THREE.SpotLight( 0xffffff, 1, 200);
+          spot = new THREE.SpotLight( 0xffffff, 1, 100);
           spot.position.set( gui.spot_pos_x, gui.spot_pos_y, gui.spot_pos_z);
-          spot.castShadow = true;		
+          spot.castShadow = true;	
+          spot.intensity=gui.spot_intensity;
+          spot.angle=gui.spot_angle;
+          spot.penumbra=gui.spot_penumbra;
+          spot.decay=gui.spot_decay;
+
           worScene.add(spot);
           add_spotlight=true;
         }else{
@@ -204,22 +228,54 @@ function draw(){
         }
       }
     );
-    spo.add(gui,"spot_pos_x",-100,100);
-    spo.add(gui,"spot_pos_y",-100,100);
-    spo.add(gui,"spot_pos_z",-100,100);
+    spo.add(gui,"spot_pos_x",-100,100).name('x轴坐标').onChange(
+      function(){
+        spot.position.x = gui.spot_pos_x;
+      }
+    );
+    spo.add(gui,"spot_pos_y",-100,100).name('y轴坐标').onChange(
+      function(){
+        spot.position.y = gui.spot_pos_y;
+      }
+    );
+    spo.add(gui,"spot_pos_z",-100,100).name('z轴坐标').onChange(
+      function(){
+        spot.position.z = gui.spot_pos_z;
+      }
+    );
+    spo.add(gui,"spot_intensity",0,3).name('光照强度').onChange(
+      function(){
+        spot.intensity=gui.spot_intensity;
+      }
+    );
+    spo.add(gui,"spot_decay",0,5).name('距离衰减量').onChange(
+      function(){
+        spot.decay=gui.spot_decay;
+      }
+    );
+    spo.add(gui,"spot_angle",0,0.8).name('光线散射角度').onChange(
+      function(){
+        spot.angle=gui.spot_angle;
+      }
+    );
+    spo.add(gui,"spot_penumbra",0,1).name('半影衰减百分比').onChange(
+      function(){
+        spot.penumbra=gui.spot_penumbra;
+      }
+    );
    
-    var amb = datGui.addFolder( 'AmbientLight' );
-    amb.add(gui,"AmbientLight").onChange(
+    var amb = datGui.addFolder( '环境光' );
+    amb.add(gui,"AmbientLight").name('开启环境光').onChange(
       function(){
         if(add_ambientlight==false){
           ambientRed=new THREE.AmbientLight( 0xff0000 );
-          ambientRed.intensity=0;
+          ambientRed.intensity=gui.ambientred_intensity;
           worScene.add(ambientRed);
           ambientGreen=new THREE.AmbientLight( 0x00ff00 );
-          ambientGreen.intensity=0;
+          ambientGreen.intensity=gui.ambientgreen_intensity;
           worScene.add(ambientGreen);
           ambientBlue=new THREE.AmbientLight( 0x0000ff );
-          ambientBlue.intensity=0;
+          ambientBlue.intensity=gui.ambientblue_intensity;
           worScene.add(ambientBlue);
           add_ambientlight=true;
         }else{
@@ -230,31 +286,48 @@ function draw(){
         }
       }
     );
-    amb.add(gui,"ambientred_intensity",0,1);
-    amb.add(gui,"ambientgreen_intensity",0,1);
-    amb.add(gui,"ambientblue_intensity",0,1);
-   
-    
-    var  mat= datGui.addFolder( 'Material' );
-    mat.add(geometryGui,"geometry_shininess",0,200);
-    mat.addColor(geometryGui,"material_color").onChange(
+    amb.add(gui,"ambientred_intensity",0,1).name('红光强度').onChange(
       function(){
-        material.emissive.set(geometryGui.material_color);
+        ambientRed.intensity = gui.ambientred_intensity;
       }
     );
-    mat.addColor(geometryGui,"material_specular").onChange(
+    amb.add(gui,"ambientgreen_intensity",0,1).name('绿光强度').onChange(
+      function(){
+        ambientGreen.intensity = gui.ambientgreen_intensity;
+      }
+    );
+    amb.add(gui,"ambientblue_intensity",0,1).name('蓝光强度').onChange(
+      function(){
+        ambientBlue.intensity = gui.ambientblue_intensity;
+      }
+    );
+   
+
+    var  mat= datGui.addFolder( '材料属性' );
+    mat.add(geometryGui,"geometry_shininess",0,200).name('高亮程度').onChange(
+      function(){
+        material.shininess = geometryGui.geometry_shininess;
+      }
+    );
+    mat.addColor(geometryGui,"material_specular").name('高光颜色').onChange(
       function(){
         material.specular.set(geometryGui.material_specular);
       }
     );
+    mat.addColor(geometryGui,"material_color").name('放射光颜色').onChange(
+      function(){
+        material.emissive.set(geometryGui.material_color);
+      }
+    );
 
     //开启线框模式
-    mat.add(geometryGui,"material_wireframe").onChange(
+    var  wir= mat.addFolder( '线框模式' );
+    wir.add(geometryGui,"material_wireframe").name('开启线框模式').onChange(
       function(){
         material.wireframe=geometryGui.material_wireframe;
       }
     );
-    mat.add(geometryGui,"geometry_radius",1,15).onChange(
+    wir.add(geometryGui,"geometry_radius",1,15).name('圆环半径').onChange(
       function(){
         if(geometryGui.material_wireframe==true){
           worScene.remove(geometry);
@@ -265,7 +338,7 @@ function draw(){
         }
       }
     );
-    mat.add(geometryGui,"geometry_tube",0.1,8).onChange(
+    wir.add(geometryGui,"geometry_tube",0.1,8).name('管道半径').onChange(
       function(){
         if(geometryGui.material_wireframe==true){
           worScene.remove(geometry);      
@@ -276,7 +349,7 @@ function draw(){
         }
       }
     );
-    mat.add(geometryGui,"geometry_radialSegments",2,50).onChange(
+    wir.add(geometryGui,"geometry_radialSegments",2,50).name('圆环分段数').onChange(
       function(){
         if(geometryGui.material_wireframe==true){
           worScene.remove(geometry);
@@ -287,7 +360,7 @@ function draw(){
         }
       }
     );
-    mat.add(geometryGui,"geometry_tubularSegments",3,300).onChange(
+    wir.add(geometryGui,"geometry_tubularSegments",3,300).name('管道分段数').onChange(
       function(){
         if(geometryGui.material_wireframe==true){
           worScene.remove(geometry);
@@ -298,7 +371,7 @@ function draw(){
         }
       }
     );
-    mat.add(geometryGui,"geometry_arc",0.1,2*PI).onChange(
+    wir.add(geometryGui,"geometry_arc",0.1,2*PI).name('圆环中心角').onChange(
       function(){
         if(geometryGui.material_wireframe==true){
           worScene.remove(geometry);
@@ -308,7 +381,7 @@ function draw(){
           material.emissive.set(geometryGui.material_color);
         }
       }
-    );
+    );    
   }
 
   //材料
@@ -323,10 +396,11 @@ function draw(){
       opacity:1,
       shininess:100,
       specular:0x4499ff,
-      reflectivity:0,
+      reflectivity:50,
       emissive:0x000000,//发出的光,默认为黑色
       //wireframe:true,//线框模式
       emissiveIntensity:1,
+
       lights:true,
       })
     );//材质对象
@@ -358,17 +432,20 @@ function draw(){
   //灯光
   var spot,point,ambientRed,ambientGreen,ambientBlue;
   function initWorLight(){
-    point = new THREE.PointLight( 0xffffff, 1, 100);//第三个衰减距离
-    point.position.set( -20, 20, 20 );
+    point = new THREE.PointLight( gui.point_color, 1, 200);//第三个衰减距离
+    point.position.set( gui.light_pos_x, gui.light_pos_y, gui.light_pos_z );
     worScene.add( point );
     
-    //点灯光
-    spot = new THREE.SpotLight( 0xffffff, 1, 200);
-    spot.position.set(40,20,30);
+    //聚光灯
+    spot = new THREE.SpotLight( 0xffffff, 1, 100);
+    spot.position.set( gui.spot_pos_x, gui.spot_pos_y, gui.spot_pos_z);
+    spot.angle=gui.spot_angle;
+    spot.penumbra=gui.spot_penumbra;
+    spot.decay=gui.spot_decay;
     spot.castShadow = true;		
     worScene.add(spot);
     
-    // //环境灯光
+    //环境灯光
     ambientRed=new THREE.AmbientLight( 0xff0000 );
     ambientRed.intensity=0;
     worScene.add(ambientRed);
@@ -555,23 +632,6 @@ function draw(){
 
     //更新性能插件
     stats.update();
-
-    //更新相关位置
-    point.position.x = gui.light_pos_x;
-    point.position.y = gui.light_pos_y;
-    point.position.z = gui.light_pos_z;
-    //light.position.d = gui.light_pos_d;
-
-    spot.position.x = gui.spot_pos_x;
-    spot.position.y = gui.spot_pos_y;
-    spot.position.z = gui.spot_pos_z;
-
-    ambientRed.intensity = gui.ambientred_intensity;
-    ambientGreen.intensity = gui.ambientgreen_intensity;
-    ambientBlue.intensity = gui.ambientblue_intensity;
-
-    material.shininess = geometryGui.geometry_shininess;
-   
     
     //更新光照法线
     worScene.remove(linelight);
@@ -602,4 +662,5 @@ function main(){
   //ring();
   draw();
 }
+
 
