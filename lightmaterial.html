@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
         <title>Light&Material</title>
         <style type="text/css">
             #scr{
@@ -10,11 +11,20 @@
                 margin: 20px;
                 border:2px solid black;
             }
+            body {
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
             #wor{
-                width: 1500px;
-                height: 1200px;
-                margin: 0px;
-                border:0px solid black;
+				position: absolute;
+				color: #ffffff;
+				top: 0px;
+				width: 100%;
+				padding: 5px;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
             }
             #com{
                 width: 500px;
@@ -22,6 +32,9 @@
                 margin: 10px;
                 border:2px solid black;
             }
+            a {
+				color: #fff;
+			}
             
         </style>
         <script src="cuon-utils.js"></script>
@@ -67,3 +80,4 @@
     </div >
 
 </body>
+
