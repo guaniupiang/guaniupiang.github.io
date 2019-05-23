@@ -55,10 +55,11 @@ function main(){
     poi.add(gui,"PointLight").name('开启点光源').onChange(
       function(){
         if(add_pointlight==false){
-          point = new THREE.PointLight( gui.point_color, 1, 200);//第三个衰减距离
-          point.position.set(  gui.light_pos_x,  gui.light_pos_y,  gui.light_pos_z );
-          worScene.add( point );
+          initPointLight();
+          pointMat.emissive.set(gui.point_color);
+          point.color.set(gui.point_color);
           add_pointlight=true;
+          point.position.set(  gui.light_pos_x,  gui.light_pos_y,  gui.light_pos_z );
         }else{
           worScene.remove( point );
           add_pointlight=false;
@@ -68,18 +69,19 @@ function main(){
     poi.addColor(gui,"point_color").name('点光源颜色').onChange(
       function(){
         point.color.set(gui.point_color);
+        pointMat.emissive.set(gui.point_color);
       });
-    poi.add(gui,"light_pos_x",-100,100).name('x轴坐标').onChange(
+    poi.add(gui,"light_pos_x",-20,20).name('x轴坐标').onChange(
       function(){
         point.position.x = gui.light_pos_x;
       }
     );
-    poi.add(gui,"light_pos_y",-100,100).name('y轴坐标').onChange(
+    poi.add(gui,"light_pos_y",-20,20).name('y轴坐标').onChange(
       function(){
         point.position.y = gui.light_pos_y;
       }
     );
-    poi.add(gui,"light_pos_z",-100,100).name('z轴坐标').onChange(
+    poi.add(gui,"light_pos_z",-20,20).name('z轴坐标').onChange(
       function(){
         point.position.z = gui.light_pos_z;
       }
@@ -320,15 +322,27 @@ function main(){
   }
  
   //灯光
-  var spot,point,ambientRed,ambientGreen,ambientBlue;
-  function initWorLight(){
+  
+  var pointGeometry,pointMat;
+  function initPointLight(){
+    pointGeometry = new THREE.SphereBufferGeometry( 0.5, 32, 32 );
     point = new THREE.PointLight( 0xffffff, 1, 200);//第三个衰减距离
+    pointMat = new THREE.MeshStandardMaterial( {
+      emissive: 0xffffff,
+      emissiveIntensity: 1,
+    } );
+    point.add( new THREE.Mesh( pointGeometry, pointMat ) );
+
     point.position.set( -20, 20, 20 );
     point.castShadow = true;
     point.shadow.mapSize.width = 2048;
     point.shadow.mapSize.height = 2048;	
     worScene.add( point );
     
+  }
+
+  var spot,point,ambientRed,ambientGreen,ambientBlue;
+  function initWorLight(){
     //聚光灯
     spot = new THREE.SpotLight( 0xffffff, 1, 100);
     spot.position.set( 40, 40, 40);
@@ -494,16 +508,16 @@ function main(){
     worScene.add(lineZ);
   }
 
-  //添加光照法线
-  var linelight;
-  function initnormalLine(){
-    var linelightMaterial=new THREE.LineBasicMaterial( { color: 0xffffff } );
-    var linelightGeometry=new THREE.Geometry();
-    linelightGeometry.vertices.push(new THREE.Vector3(  0, 0, 0) );
-    linelightGeometry.vertices.push(new THREE.Vector3( point.position.x, point.position.y, point.position.z) );
-    linelight = new THREE.Line(linelightGeometry,linelightMaterial);
-    worScene.add(linelight);
-  }
+  // //添加光照法线
+  // var linelight;
+  // function initnormalLine(){
+  //   var linelightMaterial=new THREE.LineBasicMaterial( { color: 0xffffff } );
+  //   var linelightGeometry=new THREE.Geometry();
+  //   linelightGeometry.vertices.push(new THREE.Vector3(  0, 0, 0) );
+  //   linelightGeometry.vertices.push(new THREE.Vector3( point.position.x, point.position.y, point.position.z) );
+  //   linelight = new THREE.Line(linelightGeometry,linelightMaterial);
+  //   worScene.add(linelight);
+  // }
 
   //初始化性能插件
   var stats;
@@ -536,8 +550,8 @@ function main(){
   //更新控制器
   function animate(){
     requestAnimationFrame(animate);
-    //更新光照法线
-    worScene.remove(linelight);
+    // //更新光照法线
+    // worScene.remove(linelight);
     worScene.remove(lineOne);
     worScene.remove(lineTwo);
     worScene.remove(lineThree);
@@ -549,7 +563,7 @@ function main(){
     worScene.remove(lineZ);
     worScene.remove(frontPlane);
     worScene.remove(behindPlane);
-    initnormalLine();
+    //initnormalLine();
     initPlane();
     initLine();
 
@@ -571,8 +585,7 @@ function main(){
 		worCameraTwo.position.set( 0,0,40 );
 		//worCameraTwo.quaternion.copy( worCamera.quaternion );
 
-		//matLine.resolution.set( insetWidth, insetHeight ); // resolution of the inset viewport
-    worScene.remove(linelight);
+		//worScene.remove(linelight);
     worScene.remove(lineOne);
     worScene.remove(lineTwo);
     worScene.remove(lineThree);
@@ -593,11 +606,12 @@ function main(){
   initWorScene();
   initWorCamera();
   initWorControls();
+  initPointLight();
   initWorLight();
   initWorGeometry();
   initPlane();
   initLine();
-  initnormalLine();
+  //initnormalLine();
   initStats();
   animate();
   initGui();
