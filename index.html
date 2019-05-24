@@ -1,203 +1,161 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<title>Guaniupiang</title>
-		<EMBED src="music.mp3" autostart="true" loop="-1" hidden="no" width="0" height="0">
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<style>
-			body {
-				background-color: #000000;
-				margin: 0px;
-				overflow: hidden;
-				font-family:Monospace;
-				font-size:13px;
-				text-align:center;
-				font-weight: bold;
-				text-align:center;
-			}
-			#info {
-				color:#fff;
-				position: absolute;
-				top: 0px;
-				width: 100%;
-				padding: 5px;
-			}
-			a { 
-				color: #ffffff; 
-				text-decoration:none;
-			}
-			#webglmessage a { color:#da0 }
-		</style>
-	</head>
+<!DOCTYPE HTML>
+   <html>
+       <head>
+           <!-- <meta charset="gb2312"> -->
+           <meta charset="utf-8">
+           <title>记事本</title>
+           <style type="text/css">
+           *{margin:0; padding:0;}
+           body,input{font-size:14px; line-height:24px; color:#333; font-family:Microsoft yahei, Song, Arial, Helvetica, Tahoma, Geneva;}
+           h1{margin-bottom:15px; height:100px; line-height:100px; text-align:center; font-size:24px; color:#fff; background:black;}
+          #content #post,#comment p{zoom:1;}
+          #content #post:after,#comment p:after{display:block; height:0; clear:both; visibility:hidden; overflow:hidden; content:'.';}
+          .transition{-webkit-transition:all 0.5s linear; -moz-transition:all 0.5s linear; -o-transition:all 0.5s linear; -ms-transition:all 0.5s linear; transition:all 0.5s linear;}
+          #content{margin:0 auto; width:960px; overflow:hidden;}
+          #content #post{margin-bottom:15px; padding-bottom:15px; border-bottom:1px #d4d4d4 dashed;
+                   height: 556px;
+               }
+          #content #post textarea{display:block; margin-bottom:10px; padding:5px; width:948px; height:390px; border:1px #d1d1d1 solid; border-radius:5px; resize:none; outline:none;}
+          #content #post textarea:hover{border:1px #9bdf70 solid; background:#f0fbeb;}
+          #content #post #postBt,#content #post #clearBt{margin-left:5px; padding:3px; float:right;}
+          #comment{overflow:hidden;}
+          #comment p{margin-bottom:10px; padding:10px; border-radius:5px;}
+         #comment p:nth-child(odd){border:1px solid #e3e197; background:#ffd;}
+          #comment p:nth-child(even){border:1px solid #adcd3c; background:#f2fddb;}
+          /*#comment p span{display:inline; float:left;}*/
+          #comment p .right{text-align:right;}
+          #comment p .msg{width:738px;}
+          #comment p .datetime{width:200px; color:#999; text-align:right;}
 
-	<body>
-		<div id="info"><a href="lightmaterial.html" >Light & Material</a>Welcome To Guaniupiang's Personal Technology Website</div>
 
-		<script src="three.js"></script>
-		<script src="three.min.js"></script>
-		<script src="WebGL.js"></script>
-		<script src="stats.min.js"></script>
 
-		<script>
-			if ( WEBGL.isWebGLAvailable() === false ) {
-				document.body.appendChild( WEBGL.getWebGLErrorMessage() );
-			}
+          </style>
+         <script type="text/javascript">
+             var named;
+             function delete1(id)
+             {
+                 localStorage.removeItem(id);
+                 this.Storage.writeData();
+             }
+             function prom() {
 
-			var camera, scene, renderer;
-			var spheres = [];
-			var mouseX = 0, mouseY = 0;
-			var windowHalfX = window.innerWidth / 2;
-			var windowHalfY = window.innerHeight / 2;
-			var materials = [],parameters;
+                 var name = prompt("请输入您的名字", "");//将输入的内容赋给变量 name ，
+                 named = name;
+                 //这里需要注意的是，prompt有两个参数，前面是提示的话，后面是当对话框出来后，在对话框里的默认值
 
-			
-			init();
-			animate();
-			
-			function init() {
-				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 100000 );
-				camera.position.z = 1000;
-				
-				scene = new THREE.Scene();
-                scene.background = new THREE.CubeTextureLoader()
-                    .setPath( 'textures/' )
-                    .load( [ 'px.jpg', 'nx.jpg', 'py.jpg', 'ny.jpg', 'pz.jpg', 'nz.jpg' ] );
-				
-				var geometry = new THREE.SphereBufferGeometry( 100, 32, 16 );
-				var material = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: scene.background, refractionRatio: 0.95 } );
-				material.envMap.mapping = THREE.CubeRefractionMapping;
-				for ( var i = 0; i < 50; i ++ ) {
-					var mesh = new THREE.Mesh( geometry, material );
-					mesh.position.x = Math.random() * 10000 - 5000;
-					mesh.position.y = Math.random() * 10000 - 5000;
-					mesh.position.z = Math.random() * 10000 - 5000;
-					mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 3 + 1;
-					scene.add( mesh );
-					spheres.push( mesh );
-				}
+                 if (named)//如果返回的有内容
 
-				var spriteGeometry = new THREE.BufferGeometry();
-				var vertices = [];
-				var textureLoader = new THREE.TextureLoader();
-				var sprite1 = textureLoader.load( 'textures/snowflake1.png' );
-				var sprite2 = textureLoader.load( 'textures/snowflake2.png' );
-				var sprite3 = textureLoader.load( 'textures/snowflake3.png' );
-				var sprite4 = textureLoader.load( 'textures/snowflake4.png' );
-				var sprite5 = textureLoader.load( 'textures/snowflake5.png' );
+                 {
 
-				for ( var i = 0; i < 100000; i ++ ) {
-					var x = Math.random() * 10000 - 5000;
-					var y = Math.random() * 10000 - 5000;
-					var z = Math.random() * 10000 - 5000;
-					vertices.push( x, y, z );
-				}
+                     alert("欢迎您：" + name)
+                     document.getElementById("shangtian").style.display = "none";
+                     document.getElementById("ritian").value = named;
 
-				spriteGeometry.addAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+                 }
+                 else {
+                     document.getElementById("ritian").value = "匿名发言者";
+                 }
 
-				parameters = [
-					[[ 1.0, 0.2, 0.5 ], sprite2, 20 ],
-					[[ 0.95, 0.1, 0.5 ], sprite3, 15 ],
-					[[ 0.90, 0.05, 0.5 ], sprite1, 10 ],
-					[[ 0.85, 0, 0.5 ], sprite5, 8 ],
-					[[ 0.80, 0, 0.5 ], sprite4, 5 ]
-				];
+             }
+          var Storage =
+          {
+              saveData:function()//保存数据
+              {
+    
+                      var data = document.querySelector("#post textarea");
+                  if(data.value != "")
+                  {
+                      var time = new Date().getTime() + Math.random() * 5;//getTime是Date对象中的方法，作用是返回 1970年01月01日至今的毫秒数
+                      if (named) {
+                          localStorage.setItem(time, data.value + "|" + named + "|" + this.getDateTime());//将毫秒数存入Key值中，可以降低Key值重复率
+                      }
+                      else
+                      {
+                          localStorage.setItem(time, data.value + "|" + "匿名发言者" + "|" + this.getDateTime());//将毫秒数存入Key值中，可以降低Key值重复率
+                      }
 
-				for ( var i = 0; i < parameters.length; i ++ ) {
+                      data.value = "";
+                      this.writeData();
+                  }
+                  else
+                  {
+                      alert("请填写您的留言！");
+                 }
+              },
+              writeData:function()//输出数据
+              {
+                 var dataHtml = "", data = "";
+                  for(var i = localStorage.length-1; i >= 0; i--)//效率更高的循环方法
+                  {
+                      data = localStorage.getItem(localStorage.key(i)).split("|");
+ 
+                          //dataHtml += "<p><span class=\"msg\">" + data[0] + "</span><span class=\"datetime\">" + data[1] + "</span><span>" + data[2]+"</span></p>";
+                      dataHtml += "<span style=>" + data[1] + "<span style=\"float:right\">" + data[2] + "</span><p><span class=\"msg\">" + data[0] + "<input style=\"float:right;border:none;border-radius:5px;\" id=\"clearBt\" type=\"button\" onclick=\"delete1(" + localStorage.key(i) + ");\" value=\"删除\"/>" + "</span></p>";
+                  }
+                  document.getElementById("comment").innerHTML = dataHtml;
+              },
+              clearData:function()//清空数据
+              {
+                  if(localStorage.length > 0)
+                  {
+                      if(window.confirm("清空后不可恢复，是否确认清空？"))
+                      {
+                          localStorage.clear();
+                          this.writeData();
+                      }
+                  }
+                  else
+                 {
+                     alert("没有需要清空的数据！");
+                  }
+              },
+              getDateTime:function()//获取日期时间，例如 2012-03-08 12:58:58
+              {
+                  var isZero = function(num)//私有方法，自动补零
+                  {
+                      if(num < 10)
+                     {
+                          num = "0" + num;
+                      }
+                      return num;
+                  }
+                  
+                  var d = new Date();
+                  return d.getFullYear() + "-" + isZero(d.getMonth() + 1) + "-" + isZero(d.getDate()) + " " + isZero(d.getHours()) + ":" + isZero(d.getMinutes()) + ":" + isZero(d.getSeconds());
+              }            
+          }
+          
+          window.onload = function()
+          {
+              Storage.writeData();//当打开页面的时候，先将localStorage中的数据输出一边，如果没有数据，则输出空
+              document.getElementById("postBt").onclick = function(){Storage.saveData();}//发表评论按钮添加点击事件，作用是将localStorage中的数据输出
+              document.getElementById("clearBt").onclick = function(){Storage.clearData();}//清空所有已保存的数据
+          }
 
-					var color = parameters[ i ][ 0 ];
-					var sprite = parameters[ i ][ 1 ];
-					var size = parameters[ i ][ 2 ];
 
-					materials[ i ] = new THREE.PointsMaterial( { size: size, map: sprite, blending: THREE.AdditiveBlending, depthTest: false, transparent: true } );
-					materials[ i ].color.setHSL( color[ 0 ], color[ 1 ], color[ 2 ] );
 
-					var particles = new THREE.Points( spriteGeometry, materials[ i ] );
 
-					particles.rotation.x = Math.random() * 6;
-					particles.rotation.y = Math.random() * 6;
-					particles.rotation.z = Math.random() * 6;
 
-					scene.add( particles );
+          </script>
+      </head>
+      
+      <body>
+          <h1>留言板</h1>
 
-				}
-
-				renderer = new THREE.WebGLRenderer();
-				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( window.innerWidth, window.innerHeight );
-				document.body.appendChild( renderer.domElement );
-
-				window.addEventListener( 'resize', onWindowResize, false );
-				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-				document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-				document.addEventListener( 'touchmove', onDocumentTouchMove, false );
-				
-			}
-			function onWindowResize() {
-
-				windowHalfX = window.innerWidth / 2;
-				windowHalfY = window.innerHeight / 2;
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
-				renderer.setSize( window.innerWidth, window.innerHeight );
-
-			}
-			function onDocumentMouseMove( event ) {
-
-				mouseX = ( event.clientX - windowHalfX ) * 10;
-				mouseY = ( event.clientY - windowHalfY ) * 10;
-
-			}
-			function onDocumentTouchStart( event ) {
-
-				if ( event.touches.length === 1 ) {
-					event.preventDefault();
-					mouseX = event.touches[ 0 ].pageX - windowHalfX;
-					mouseY = event.touches[ 0 ].pageY - windowHalfY;
-				}
-			}
-
-			function onDocumentTouchMove( event ) {
-
-				if ( event.touches.length === 1 ) {
-					event.preventDefault();
-					mouseX = event.touches[ 0 ].pageX - windowHalfX;
-					mouseY = event.touches[ 0 ].pageY - windowHalfY;
-				}
-			}
-			function animate() {
-				requestAnimationFrame( animate );
-				render();
-			}
-			function render() {
-				var timer = 0.0001 * Date.now();
-				for ( var i = 0, il = spheres.length; i < il; i ++ ) {
-					var sphere = spheres[ i ];
-					sphere.position.x = 5000 * Math.cos( timer - i );
-					sphere.position.y = 5000 * Math.sin( timer - i * 1.1 );
-				}
-
-				var spritesTime = Date.now() * 0.000001;
-				camera.position.x += ( mouseX - camera.position.x ) * 0.05;
-				camera.position.y += ( - mouseY - camera.position.y ) * 0.05;
-				camera.lookAt( scene.position );
-
-				for ( var i = 0; i < scene.children.length; i ++ ) {
-
-					var object = scene.children[ i ];
-					if ( object instanceof THREE.Points ) {
-						object.rotation.y = spritesTime * ( i < 4 ? i + 1 : - ( i + 1 ) );
-					}
-				}
-
-				for ( var i = 0; i < materials.length; i ++ ) {
-					var color = parameters[ i ][ 0 ];
-					var h = ( 360 * ( color[ 0 ] + spritesTime ) % 360 ) / 360;
-					materials[ i ].color.setHSL( h, color[ 1 ], color[ 2 ] );
-				}
-
-				renderer.render( scene, camera );
-			}
-		</script>
-	</body>
-</html>
+          <div id="content">
+              <div id="post">
+                  <div style="background:#3EADC5 ;height:30px;">
+                      昵称：<input type="submit" id="shangtian" name="Submit3" style="border:none; background-color:#3EADC5; color:white;" value="默认用户点击改变" onclick="prom()" />
+                      <input type="text" id="ritian" style="border:none; background-color:#3EADC5; color:white;"   onclick="prom()"/>
+                      <!--disabled="disabled"-->
+                  </div>
+                  <div>
+                  <textarea class="transition"></textarea>
+                      </div>
+                  <input id="postBt" type="button" style="border:none; background-color:#3EADC5; color:white;border-radius:5px; width:80px; height:30px;" value="发表留言"/>
+                 <input id="clearBt" type="button" style="border:none; background-color:#3EADC5; color:white;border-radius:5px; width:80px; height:30px;" value="清空"/>
+             </div>
+             <div id="comment"></div>
+              </div>
+          </body>
+ </html>
