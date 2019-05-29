@@ -273,7 +273,7 @@ function main(){
     );    
   }
 
-function initOBJ(){
+function initWorGeometry(){
       // instantiate a loader
     var loader = new THREE.OBJLoader();
     // load a resource
