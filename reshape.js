@@ -394,6 +394,19 @@ function main(){
     );
     sty.add(geometryGui,"dolphins").name("海豚").onChange(
       function(){
+        scene.remove(geometry);
+        var mtlLoader = new THREE.MTLLoader();
+        mtlLoader.setPath('data/');
+        mtlLoader.load('dolphins.mtl', function (material) {
+            var objLoader = new THREE.OBJLoader();
+            objLoader.setMaterials(material);
+            objLoader.setPath('data/');
+            objLoader.load('dolphins.obj', function (geometry) {
+            geometry.scale.set(3, 3, 3);
+            geometry.position.set(6,-8,0);
+            scene.add(geometry);
+            })
+        });
       }
     );
     sty.add(geometryGui,"flowers").name("鲜花").onChange(
