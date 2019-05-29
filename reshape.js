@@ -387,6 +387,7 @@ function main(){
       }
     );
     }
+	var myObjects;
 function clearScene(){
 	// 从scene中删除模型并释放内存
 	if(myObjects.length > 0){		
