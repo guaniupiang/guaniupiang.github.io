@@ -1,21 +1,33 @@
 function main(){
+
+  var information=document.getElementById("p");
+  //var ctx=information.getContext("2d");
+  //ctx.font="30px Arial";
+  //ctx.fillStyle="0xffffff";
+  //ctx.fillRect(100,350,150,100); 
+  //ctx.fillText("abcdefghijklmnopqrstuvwxyzcvzx",10,10);
+  information.innerHTML="拖动鼠标左键/右键/中键可以旋转/移动/放大缩小模型，通过右侧控制面板点击参数类型滑动改变模型参数";
+  
+
+
+
   //场景
-  var worScene;
+  var scene;
   function initWorScene(){
     // wor=document.getElementById("wor");
     // worWidth= wor.clientWidth;
     // worHeight= wor.clientHeight;
-    
-    worScene=new THREE.Scene();//创建场景
+    scene=new THREE.Scene();//创建场景
   }
 
   //初始化dat.GUI简化试验流程
   var gui,geometryGui,add_pointlight=true,add_spotlight=true,add_ambientlight=true;
   const PI=3.1415926;
+  //var tag=true; //解决显示信息（innerHTML）所带来的的性能问题
   function initGui(){
     //声明一个保存需求修改的相关数据的对象
     gui = {
-      point_color:0xffffff,
+      point_color:0xffffff, //点光源颜色白色
       light_pos_x:-20, //点光源向量x轴的位置
       light_pos_y:20, //点光源向量y轴的位置
       light_pos_z:20, //点光源向量z轴的位置
@@ -36,6 +48,7 @@ function main(){
       SpotLight:true, //聚光灯是否开启
       AmbientLight:true, //环境光是否开启
     };
+
     geometryGui = {
       geometry_shininess:100, //高亮程度
       material_color:0x000000, //放射光颜色
@@ -46,7 +59,13 @@ function main(){
       geometry_radialSegments:16, //圆环分段数
       geometry_tubularSegments:100, //管道分段数
       geometry_arc:2*PI, //圆环中心角
-
+      geometry_pos_x:0, //模型x轴坐标
+      geometry_pos_y:0, //模型y轴坐标
+      geometry_pos_z:0, //模型z轴坐标
+      geometry_rotation_x:0, //沿x轴旋转角度
+      geometry_rotation_y:0, //沿y轴旋转角度
+      geometry_rotation_z:0, //沿z轴旋转角度
+      geometry_size:1, //模型缩放倍数大小
     };
 
     var datGui = new dat.GUI();
@@ -54,31 +73,34 @@ function main(){
     var poi = datGui.addFolder( '点光源' );
     poi.add(gui,"PointLight").name('开启点光源').onChange(
       function(){
-        if(add_pointlight==false){
-          initPointLight();
-          pointMat.emissive.set(gui.point_color);
-          point.color.set(gui.point_color);
-          add_pointlight=true;
-          point.position.set(  gui.light_pos_x,  gui.light_pos_y,  gui.light_pos_z );
-        }else{
-          worScene.remove( point );
-          add_pointlight=false;
-        }
-      }
-    );
+          if(add_pointlight==false){
+            //initPointlight();
+            scene.add( point );
+            pointMat.emissive.set(gui.point_color);
+            point.color.set(gui.point_color);
+            add_pointlight=true;
+            point.position.set(  gui.light_pos_x,  gui.light_pos_y,  gui.light_pos_z );
+          }else{
+            scene.remove( point );
+            add_pointlight=false;
+          }
+    });
     poi.addColor(gui,"point_color").name('点光源颜色').onChange(
       function(){
         point.color.set(gui.point_color);
         pointMat.emissive.set(gui.point_color);
+          information.innerHTML="color";
       });
     poi.add(gui,"light_pos_x",-20,20).name('x轴坐标').onChange(
       function(){
         point.position.x = gui.light_pos_x;
+        information.innerHTML="xvsd,.jfhakjfhkladjfhlakjdshfkadjshflasjdhfajdshfadjhflajdf";
       }
     );
     poi.add(gui,"light_pos_y",-20,20).name('y轴坐标').onChange(
       function(){
         point.position.y = gui.light_pos_y;
+          information.innerHTML="y";
       }
     );
     poi.add(gui,"light_pos_z",-20,20).name('z轴坐标').onChange(
@@ -99,10 +121,10 @@ function main(){
           spot.penumbra=gui.spot_penumbra;
           spot.decay=gui.spot_decay;
 
-          worScene.add(spot);
+          scene.add(spot);
           add_spotlight=true;
         }else{
-          worScene.remove( spot );
+          scene.remove( spot );
           add_spotlight=false;
         }
       }
@@ -149,18 +171,18 @@ function main(){
         if(add_ambientlight==false){
           ambientRed=new THREE.AmbientLight( 0xff0000 );
           ambientRed.intensity=gui.ambientred_intensity;
-          worScene.add(ambientRed);
+          scene.add(ambientRed);
           ambientGreen=new THREE.AmbientLight( 0x00ff00 );
           ambientGreen.intensity=gui.ambientgreen_intensity;
-          worScene.add(ambientGreen);
+          scene.add(ambientGreen);
           ambientBlue=new THREE.AmbientLight( 0x0000ff );
           ambientBlue.intensity=gui.ambientblue_intensity;
-          worScene.add(ambientBlue);
+          scene.add(ambientBlue);
           add_ambientlight=true;
         }else{
-          worScene.remove(ambientRed);
-          worScene.remove(ambientGreen);
-          worScene.remove(ambientBlue);
+          scene.remove(ambientRed);
+          scene.remove(ambientGreen);
+          scene.remove(ambientBlue);
           add_ambientlight=false;
         }
       }
@@ -199,17 +221,64 @@ function main(){
       }
     );
 
-    var  wir= mat.addFolder( '线框模式' );
+    var geo = datGui.addFolder('模型变化');
+    geo.add(geometryGui,"geometry_pos_x",-5,5).name('沿x轴平移').onChange(
+      function(){
+        geometry.position.x = geometryGui.geometry_pos_x;   
+          information.innerHTML="xx";
+      }
+    );
+    geo.add(geometryGui,"geometry_pos_y",-5,5).name('沿y轴平移').onChange(
+      function(){
+        geometry.position.y = geometryGui.geometry_pos_y;   
+          information.innerHTML="yy";
+      }
+    );
+    geo.add(geometryGui,"geometry_pos_z",-5,5).name('沿z轴平移').onChange(
+      function(){
+        geometry.position.z = geometryGui.geometry_pos_z;   
+          information.innerHTML="zz";
+      }
+    );
+    geo.add(geometryGui,"geometry_rotation_x",-2*PI,2*PI).name('沿x轴旋转').onChange(
+      function(){
+        geometry.rotation.x=geometryGui.geometry_rotation_x;   
+          information.innerHTML="xxx";
+      }
+    );
+    geo.add(geometryGui,"geometry_rotation_y",-2*PI,2*PI).name('沿y轴旋转').onChange(
+      function(){
+        geometry.rotation.y=geometryGui.geometry_rotation_y;    
+          information.innerHTML="yyy";
+      }
+    );
+    geo.add(geometryGui,"geometry_rotation_z",-2*PI,2*PI).name('沿z轴旋转').onChange(
+      function(){
+        geometry.rotation.z=geometryGui.geometry_rotation_z;   
+          information.innerHTML="zzz";
+      }
+    );
+    geo.add(geometryGui,"geometry_size",0.1,1.8).name('缩放').onChange(
+      function(){
+        scene.remove(geometry);
+        radius=geometryGui.geometry_size*10;
+        tube=geometryGui.geometry_size*3;
+        initGeometry();
+        material.emissive.set(geometryGui.material_color);
+        information.innerHTML="zzz";
+      }
+    );
+
+    var  wir= geo.addFolder( '线框模式' );
     wir.add(geometryGui,"material_wireframe").name('开启线框模式').onChange(
       function(){
-        worScene.remove(geometry);
-        
-        radius = geometryGui.geometry_radius;
-        tube = geometryGui.geometry_tube;
-        radialSegments = geometryGui.geometry_radialSegments;
-        tubularSegments = geometryGui.geometry_tubularSegments;
-        arc = geometryGui.geometry_arc;
-        initWorGeometry();
+        scene.remove(geometry);
+        //radius = geometryGui.geometry_radius;
+        //tube = geometryGui.geometry_tube;
+        //radialSegments = geometryGui.geometry_radialSegments;
+        //tubularSegments = geometryGui.geometry_tubularSegments;
+        //arc = geometryGui.geometry_arc;
+        initGeometry();
         material.wireframe=geometryGui.material_wireframe;
         material.shininess = geometryGui.geometry_shininess;
         material.specular.set(geometryGui.material_specular);
@@ -219,9 +288,9 @@ function main(){
     wir.add(geometryGui,"geometry_radius",1,15).name('圆环半径').onChange(
       function(){
         if(geometryGui.material_wireframe==true){
-          worScene.remove(geometry);
+          scene.remove(geometry);
           radius = geometryGui.geometry_radius;
-          initWorGeometry();
+          initGeometry();
           material.wireframe=true;
           material.emissive.set(geometryGui.material_color);
         }
@@ -230,9 +299,9 @@ function main(){
     wir.add(geometryGui,"geometry_tube",0.1,7).name('管道半径').onChange(
       function(){
         if(geometryGui.material_wireframe==true){
-          worScene.remove(geometry);      
+          scene.remove(geometry);      
           tube = geometryGui.geometry_tube;
-          initWorGeometry();
+          initGeometry();
           material.wireframe=true;
           material.emissive.set(geometryGui.material_color);
         }
@@ -241,9 +310,9 @@ function main(){
     wir.add(geometryGui,"geometry_radialSegments",2,50).name('圆环分段数').onChange(
       function(){
         if(geometryGui.material_wireframe==true){
-          worScene.remove(geometry);
+          scene.remove(geometry);
           radialSegments = geometryGui.geometry_radialSegments;
-          initWorGeometry();
+          initGeometry();
           material.wireframe=true;
           material.emissive.set(geometryGui.material_color);
         }
@@ -252,9 +321,9 @@ function main(){
     wir.add(geometryGui,"geometry_tubularSegments",3,300).name('管道分段数').onChange(
       function(){
         if(geometryGui.material_wireframe==true){
-          worScene.remove(geometry);
+          scene.remove(geometry);
           tubularSegments = geometryGui.geometry_tubularSegments;
-          initWorGeometry();
+          initGeometry();
           material.wireframe=true;
           material.emissive.set(geometryGui.material_color);
         }
@@ -263,9 +332,9 @@ function main(){
     wir.add(geometryGui,"geometry_arc",0.1,2*PI).name('圆环中心角').onChange(
       function(){
         if(geometryGui.material_wireframe==true){
-          worScene.remove(geometry);
+          scene.remove(geometry);
           arc = geometryGui.geometry_arc;
-          initWorGeometry();
+          initGeometry();
           material.wireframe=true;
           material.emissive.set(geometryGui.material_color);
         }
@@ -273,75 +342,161 @@ function main(){
     );    
   }
 
-function initWorGeometry(){
-      // instantiate a loader
-    var loader = new THREE.OBJLoader();
-    // load a resource
-    loader.load(
-    	// resource URL
-    	'data/f-16.obj',
-    	// called when resource is loaded
-    	function ( object ) {
-    		worScene.add( object );
-    	},
-    	// called when loading is in progresses
-    	function ( xhr ) {
-    		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-    	},
-    	// called when loading has errors
-    	function ( error ) {
-    		console.log( 'An error happened :'+error );
-    	}
-    );
-}
+  // //添加模型
+  // var geometry,material;
+  // var radius=10,tube=3,radialSegments=16,tubularSegments=100,arc=2*PI;
+  // function initGeometry(){
+  //   geometry = new THREE.Mesh(
+  //     new THREE.TorusGeometry( radius, tube, radialSegments, tubularSegments, arc ),
+  //     material = new THREE.MeshPhongMaterial({ 
+  //     color: 0x4499ff,
+  //     transparent:true,
+  //     opacity:1,
+  //     shininess:100,
+  //     specular:0x4499ff,
+  //     reflectivity:0,
+  //     emissive:0x000000,//发出的光,默认为黑色
+  //     emissiveIntensity:1,
+  //     lights:true,
+  //     })
+  //   );//材质对象
+  //   geometry.position.set(geometryGui.geometry_pos_x, geometryGui.geometry_pos_y, geometryGui.geometry_pos_z);
+  //   geometry.rotation.set(geometryGui.geometry_rotation_x,geometryGui.geometry_rotation_y,geometryGui.geometry_rotation_z);  
+  //   geometry.castShadow = true;
+  //   scene.add(geometry);
+  // }
+
+
+  function initOBJ(){
+    //   // instantiate a loader
+    // var loader = new THREE.OBJLoader();
+    // // load a resource
+    // loader.load(
+    // 	// resource URL
+    // 	'data/f-16.obj',
+    // 	// called when resource is loaded
+    // 	function ( object ) {
+    // 		scene.add( object );
+    // 	},
+    // 	// called when loading is in progresses
+    // 	function ( xhr ) {
+    // 		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+    // 	},
+    // 	// called when loading has errors
+    // 	function ( error ) {
+    // 		console.log( 'An error happened :'+error );
+    // 	}
+    // );
+
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.setPath('data/');
+    //加载mtl文件
+    mtlLoader.load('f-16.mtl', function (material) {
+        var objLoader = new THREE.OBJLoader();
+        //设置当前加载的纹理
+        objLoader.setMaterials(material);
+        objLoader.setPath('data/');
+        objLoader.load('f-16.obj', function (object) {
+
+            // //获取两个翅膀的位置
+            // var wing2 = object.children[5];
+            // var wing1 = object.children[4];
+
+            // //设置两个翅膀的透明度
+            // wing1.material.opacity = 0.6;
+            // wing1.material.transparent = true;
+            // wing1.material.depthTest = false;
+            // wing1.material.side = THREE.DoubleSide;
+
+            // wing2.material.opacity = 0.6;
+            // wing2.material.depthTest = false;
+            // wing2.material.transparent = true;
+            // wing2.material.side = THREE.DoubleSide;
+
+            //将模型缩放并添加到场景当中
+            object.scale.set(20, 20, 20);
+            scene.add(object);
+        })
+    });
+
+    // //加载OBJ格式的模型
+    // var loader = new THREE.OBJLoader();
+    // loader.load("data/f-16.obj",function (loadedMesh) {
+    //     var material = new THREE.MeshLambertMaterial({color: 0x5C3A21});
+
+    //     // 加载完obj文件是一个场景组，遍历它的子元素，赋值纹理并且更新面和点的发现了
+    //     loadedMesh.children.forEach(function (child) {
+    //         child.material = material;
+    //         child.geometry.computeFaceNormals();
+    //         child.geometry.computeVertexNormals();
+    //     });
+
+    //     //模型放大一百倍
+    //     loadedMesh.scale.set(100, 100, 100);
+    //     scene.add(loadedMesh);
+    // });
+
+
+  }
+  // // instantiate the loader
+  // function initOBJ(){
+  //   var loader = new THREE.OBJLoader2();
+
+  //   // function called on successful load
+  //   var callbackOnLoad = function ( event ) {
+  //     scene.add( event.detail.loaderRootNode );
+  //   };
+
+  //   // load a resource from provided URL synchronously
+  //   loader.load('data/f-16.obj', callbackOnLoad, null, null, null, false );
+  // }
 
   //照相机
-  var worCamera;
-  function initWorCamera(){
-    worCamera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1000);
+  var camera;
+  function initCamera(){
+    camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1000);
                                           //透视投影(fov,aspect,near,far)
-    worCamera.position.set(50,0,50);
+    camera.position.set(50,0,50);
 
-    worCameraTwo = new THREE.PerspectiveCamera( 60, 1, 1, 1000 );
-		worCameraTwo.position.set( 0,0,5 );
+    cameraTwo = new THREE.PerspectiveCamera( 60, 1, 1, 1000 );
+		cameraTwo.position.set( 0,0,5 );
   }
   
   //渲染器设置
-  var worRenderer;
-  function initWorRender(){
-    worRenderer=new THREE.WebGLRenderer({ antialias: true });
-    worRenderer.setPixelRatio( window.devicePixelRatio );
-    worRenderer.setClearColor(0x000000,1); //背景色，黑色
-    worRenderer.setSize(window.innerWidth, window.innerHeight);
+  var renderer;
+  function initRender(){
+    renderer=new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setClearColor(0x000000,1); //背景色，黑色
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
-    worRenderer.shadowMapEnabled = true; //开启阴影
-    worRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    document.body.appendChild(worRenderer.domElement);//插入canvas对象
+    renderer.shadowMapEnabled = true; //开启阴影
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    document.body.appendChild(renderer.domElement);//插入canvas对象
   }
  
-  //灯光
-  
-  var pointGeometry,pointMat;
-  function initPointLight(){
-    pointGeometry = new THREE.SphereBufferGeometry( 0.5, 32, 32 );
+  //添加点光源
+  var point,pointMat;
+  function initPointlight(){
     point = new THREE.PointLight( 0xffffff, 1, 200);//第三个衰减距离
-    pointMat = new THREE.MeshStandardMaterial( {
-      emissive: 0xffffff,
-      emissiveIntensity: 1,
-    } );
-    point.add( new THREE.Mesh( pointGeometry, pointMat ) );
-
+    point.add( new THREE.Mesh(
+      new THREE.SphereBufferGeometry( 0.5, 32, 32 ),
+      pointMat = new THREE.MeshPhongMaterial( {
+        emissive: 0xffffff,
+        emissiveIntensity: 1,
+      }) 
+    ));
     point.position.set( -20, 20, 20 );
+    point.receiveShadow=false;
     point.castShadow = true;
     point.shadow.mapSize.width = 2048;
     point.shadow.mapSize.height = 2048;	
-    worScene.add( point );
-    
+    scene.add( point );
   }
 
-  var spot,point,ambientRed,ambientGreen,ambientBlue;
-  function initWorLight(){
-    //聚光灯
+  var spot,ambientRed,ambientGreen,ambientBlue;
+  function initLight(){
+    //添加聚光灯
     spot = new THREE.SpotLight( 0xffffff, 1, 100);
     spot.position.set( 40, 40, 40);
     spot.angle=PI/4;
@@ -350,27 +505,26 @@ function initWorGeometry(){
     spot.castShadow = true;		
     spot.shadow.mapSize.width = 2048;
     spot.shadow.mapSize.height = 2048;
-    worScene.add(spot);
+    scene.add(spot);
     
-    //环境灯光
+    //添加环境三色光
     ambientRed=new THREE.AmbientLight( 0xff0000 );
     ambientRed.intensity=0;
-    worScene.add(ambientRed);
+    scene.add(ambientRed);
     ambientGreen=new THREE.AmbientLight( 0x00ff00 );
     ambientGreen.intensity=0;
-    worScene.add(ambientGreen);
+    scene.add(ambientGreen);
     ambientBlue=new THREE.AmbientLight( 0x0000ff );
     ambientBlue.intensity=0;
-    worScene.add(ambientBlue);
+    scene.add(ambientBlue);
   }
 
   // //设置渲染函数，执行渲染器
   // function worRender(){
   //   //requestAnimationFrame(worRender);
   //   //controls.update();
-  
-  //   worRenderer.render(worScene,worCamera);
-  //   worRenderer.setSize( window.innerWidth, window.innerHeight );
+  //   renderer.render(scene,camera);
+  //   renderer.setSize( window.innerWidth, window.innerHeight );
   // }
 
   //生成一个前平面一个后平面
@@ -378,8 +532,7 @@ function initWorGeometry(){
   var frontPlaneGeometry,frontPlaneMaterial,frontPlane;
   function initPlane(){
     //生成一个后平面
-    behindPlaneGeometry=new THREE.PlaneGeometry(70,70);//后平面
-    //生成一个材质
+    behindPlaneGeometry=new THREE.PlaneGeometry(70,70);
     behindPlaneMaterial=new THREE.MeshLambertMaterial({color:0x3d3d3d});//背面面板深灰
     //生成一个网格，将平面和材质放在一个网格中，组合在一起，组成一个物体
     behindPlane=new THREE.Mesh(behindPlaneGeometry,behindPlaneMaterial);
@@ -387,28 +540,27 @@ function initWorGeometry(){
     behindPlane.position.y=0;
     behindPlane.position.z=-30;
     behindPlane.receiveShadow=true;//平面进行接受阴影
+    scene.add(behindPlane);
 
     //生成一个前平面
-    frontPlaneGeometry=new THREE.PlaneGeometry(8,8);//前平面
-    //生成一个材质
+    frontPlaneGeometry=new THREE.PlaneGeometry(8,8);
     frontPlaneMaterial=new THREE.MeshPhongMaterial({
       color:0x0033ff,
       opacity:0.5,
       transparent:true
     });//前面面板透明深蓝
-    //生成一个网格，将平面和材质放在一个网格中，组合在一起，组成一个物体
     frontPlane=new THREE.Mesh(frontPlaneGeometry,frontPlaneMaterial);
     //plane.rotation.x=-0.5*Math.PI;//将平面沿着x轴进行旋转
     frontPlane.position.x=0;
     frontPlane.position.y=0;
     frontPlane.position.z=25;
     frontPlane.receiveShadow=true;//平面进行接受阴影
-    worScene.add(frontPlane);
-    worScene.add(behindPlane);
+    scene.add(frontPlane);
   }
 
   //添加线
-  var lineMaterial,lineOneGeometry,lineOne;
+  var lineMaterial;
+  var lineOneGeometry,lineOne;
   var lineTwoGeometry,lineTwo;
   var lineThreeGeometry,lineThree;
   var lineFourGeometry,lineFour;
@@ -424,25 +576,25 @@ function initWorGeometry(){
     lineOneGeometry.vertices.push(new THREE.Vector3( 4, 4, 25) );
     lineOneGeometry.vertices.push(new THREE.Vector3(35,35,-30) );
     lineOne = new THREE.Line(lineOneGeometry,lineMaterial);
-    worScene.add(lineOne);
+    scene.add(lineOne);
     
     lineTwoGeometry=new THREE.Geometry();
     lineTwoGeometry.vertices.push(new THREE.Vector3( 4, -4, 25) );
     lineTwoGeometry.vertices.push(new THREE.Vector3(35,-35,-30) );
     lineTwo = new THREE.Line(lineTwoGeometry,lineMaterial);
-    worScene.add(lineTwo);
+    scene.add(lineTwo);
 
     lineThreeGeometry=new THREE.Geometry();
     lineThreeGeometry.vertices.push(new THREE.Vector3( -4, 4, 25) );
     lineThreeGeometry.vertices.push(new THREE.Vector3(-35,35,-30) );
     lineThree = new THREE.Line(lineThreeGeometry,lineMaterial);
-    worScene.add(lineThree);
+    scene.add(lineThree);
 
     lineFourGeometry=new THREE.Geometry();
     lineFourGeometry.vertices.push(new THREE.Vector3( -4, -4, 25) );
     lineFourGeometry.vertices.push(new THREE.Vector3(-35,-35,-30) );
     lineFour = new THREE.Line(lineFourGeometry,lineMaterial);
-    worScene.add(lineFour);
+    scene.add(lineFour);
 
     //中心线
     lineCenterMaterial=new THREE.LineBasicMaterial( { color: 0x0000ff } );
@@ -451,7 +603,7 @@ function initWorGeometry(){
     lineCenterGeometry.vertices.push(new THREE.Vector3( 0, 0,30) );
     lineCenterGeometry.vertices.push(new THREE.Vector3( 0, 0, 0) );
     lineCenter = new THREE.Line(lineCenterGeometry,lineCenterMaterial);
-    worScene.add(lineCenter);
+    scene.add(lineCenter);
 
     lineCenterarrowGeometry=new THREE.Geometry();
     lineCenterarrowGeometry.vertices.push(new THREE.Vector3( 2, 0, 3) );
@@ -463,13 +615,13 @@ function initWorGeometry(){
     lineCenterarrowGeometry.vertices.push(new THREE.Vector3( 0, 2, 3) );
     lineCenterarrowGeometry.vertices.push(new THREE.Vector3( 0, 0, 0) );
     lineCenterarrow = new THREE.Line(lineCenterarrowGeometry,lineCenterMaterial);
-    worScene.add(lineCenterarrow);
+    scene.add(lineCenterarrow);
 
     //生成一个坐标轴，辅助线
     lineXMaterial=new THREE.LineBasicMaterial( { color: 0xff0000 } );
     lineXGeometry=new THREE.Geometry();
     lineXGeometry.vertices.push(new THREE.Vector3( 0, 0,30) );
-    lineXGeometry.vertices.push(new THREE.Vector3( 7, 0,30) );//
+    lineXGeometry.vertices.push(new THREE.Vector3( 7, 0,30) );//中心点
     lineXGeometry.vertices.push(new THREE.Vector3( 6, 1,30) );
     lineXGeometry.vertices.push(new THREE.Vector3( 6,-1,30) );
     lineXGeometry.vertices.push(new THREE.Vector3( 7, 0,30) );//
@@ -477,12 +629,12 @@ function initWorGeometry(){
     lineXGeometry.vertices.push(new THREE.Vector3( 6, 0,31) );
     lineXGeometry.vertices.push(new THREE.Vector3( 7, 0,30) );//
     lineX = new THREE.Line(lineXGeometry,lineXMaterial);
-    worScene.add(lineX);
+    scene.add(lineX);
 
     lineYMaterial=new THREE.LineBasicMaterial( { color: 0xffff00 } );
     lineYGeometry=new THREE.Geometry();
     lineYGeometry.vertices.push(new THREE.Vector3( 0, 0,30) );
-    lineYGeometry.vertices.push(new THREE.Vector3( 0, 7,30) );//
+    lineYGeometry.vertices.push(new THREE.Vector3( 0, 7,30) );//中心点
     lineYGeometry.vertices.push(new THREE.Vector3( 1, 6,30) );
     lineYGeometry.vertices.push(new THREE.Vector3(-1, 6,30) );
     lineYGeometry.vertices.push(new THREE.Vector3( 0, 7,30) );//
@@ -490,12 +642,12 @@ function initWorGeometry(){
     lineYGeometry.vertices.push(new THREE.Vector3( 0, 6,31) );
     lineYGeometry.vertices.push(new THREE.Vector3( 0, 7,30) );//
     lineY = new THREE.Line(lineYGeometry,lineYMaterial);
-    worScene.add(lineY);
+    scene.add(lineY);
 
     lineZMaterial=new THREE.LineBasicMaterial( { color: 0x0000ff } );
     lineZGeometry=new THREE.Geometry();
     lineZGeometry.vertices.push(new THREE.Vector3( 0, 0,30) );
-    lineZGeometry.vertices.push(new THREE.Vector3( 0, 0,37) );//
+    lineZGeometry.vertices.push(new THREE.Vector3( 0, 0,37) );//中心点
     lineZGeometry.vertices.push(new THREE.Vector3( 1, 0,36) );
     lineZGeometry.vertices.push(new THREE.Vector3(-1, 0,36) );
     lineZGeometry.vertices.push(new THREE.Vector3( 0, 0,37) );//
@@ -503,7 +655,7 @@ function initWorGeometry(){
     lineZGeometry.vertices.push(new THREE.Vector3( 0,-1,36) );
     lineZGeometry.vertices.push(new THREE.Vector3( 0, 0,37) );//
     lineZ = new THREE.Line(lineZGeometry,lineZMaterial);
-    worScene.add(lineZ);
+    scene.add(lineZ);
   }
 
   // //添加光照法线
@@ -514,7 +666,7 @@ function initWorGeometry(){
   //   linelightGeometry.vertices.push(new THREE.Vector3(  0, 0, 0) );
   //   linelightGeometry.vertices.push(new THREE.Vector3( point.position.x, point.position.y, point.position.z) );
   //   linelight = new THREE.Line(linelightGeometry,linelightMaterial);
-  //   worScene.add(linelight);
+  //   scene.add(linelight);
   // }
 
   //初始化性能插件
@@ -525,93 +677,93 @@ function initWorGeometry(){
   }
 
   //用户交互插件 鼠标左键按住旋转，右键按住平移，滚轮缩放,轨道控制器OrbitControls
-  var controlss;
-  function initWorControls(){
-    controlss=new THREE.OrbitControls(worCamera);
+  var controls;
+  function initControls(){
+    controls=new THREE.OrbitControls(camera);
     window.addEventListener('resize', onWindowResize,false);
     onWindowResize();
-    controlss.enablePan = true;
+    controls.enablePan = true;
   }
-  var insetWidth,insetHeight;
-  //窗口变动触发的函数
-  function onWindowResize() {
-    worCamera.aspect = window.innerWidth / window.innerHeight;
-    worCamera.updateProjectionMatrix();
-    worRenderer.setSize( window.innerWidth , window.innerHeight);
 
-    insetWidth = window.innerHeight / 4; // square
+  //窗口变动触发的函数
+  var insetWidth,insetHeight;
+  function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize( window.innerWidth , window.innerHeight);
+
+    insetWidth = window.innerHeight / 4; //小窗口
 		insetHeight = window.innerHeight / 4;
-		worCameraTwo.aspect = insetWidth / insetHeight;
-	  worCameraTwo.updateProjectionMatrix();
+		cameraTwo.aspect = insetWidth / insetHeight;
+	  cameraTwo.updateProjectionMatrix();
   }
 
   //更新控制器
   function animate(){
     requestAnimationFrame(animate);
     // //更新光照法线
-    // worScene.remove(linelight);
-    worScene.remove(lineOne);
-    worScene.remove(lineTwo);
-    worScene.remove(lineThree);
-    worScene.remove(lineFour);
-    worScene.remove(lineCenter);
-    worScene.remove(lineCenterarrow);
-    worScene.remove(lineX);
-    worScene.remove(lineY);
-    worScene.remove(lineZ);
-    worScene.remove(frontPlane);
-    worScene.remove(behindPlane);
+    // scene.remove(linelight);
+    scene.remove(lineOne);
+    scene.remove(lineTwo);
+    scene.remove(lineThree);
+    scene.remove(lineFour);
+    scene.remove(lineCenter);
+    scene.remove(lineCenterarrow);
+    scene.remove(lineX);
+    scene.remove(lineY);
+    scene.remove(lineZ);
+    scene.remove(frontPlane);
+    scene.remove(behindPlane);
     //initnormalLine();
     initPlane();
     initLine();
 
-    controlss.update();
-        
+    controls.update();
     stats.update();
     //worRender();
-    worRenderer.setClearColor( 0x000000, 0 );
-    worRenderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
+    renderer.setClearColor( 0x000000, 0 );
+    renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
     // renderer will set this eventually
-    worRenderer.render( worScene, worCamera );
+    renderer.render( scene, camera );
 
-    worRenderer.setClearColor( 0x3d3d3d, 1 );
-		worRenderer.clearDepth(); // important!
-		worRenderer.setScissorTest( true );
-		worRenderer.setScissor( 20, window.innerHeight - insetHeight - 20, insetWidth, insetHeight );
-		worRenderer.setViewport( 20, window.innerHeight - insetHeight - 20, insetWidth, insetHeight );
+    renderer.setClearColor( 0x3d3d3d, 1 );//小窗口
+		renderer.clearDepth(); // important!
+		renderer.setScissorTest( true );
+		renderer.setScissor( 20, window.innerHeight - insetHeight - 20, insetWidth, insetHeight );
+		renderer.setViewport( 20, window.innerHeight - insetHeight - 20, insetWidth, insetHeight );
 
-		worCameraTwo.position.set( 0,0,40 );
-		//worCameraTwo.quaternion.copy( worCamera.quaternion );
+		cameraTwo.position.set( 0,0,40 );
+		//cameraTwo.quaternion.copy( camera.quaternion );//跟随转动
+		//scene.remove(linelight);
+    scene.remove(lineOne);
+    scene.remove(lineTwo);
+    scene.remove(lineThree);
+    scene.remove(lineFour);
+    scene.remove(lineCenter);
+    scene.remove(lineCenterarrow);
+    scene.remove(lineX);
+    scene.remove(lineY);
+    scene.remove(lineZ);
+    scene.remove(frontPlane);
+    scene.remove(behindPlane);
 
-		//worScene.remove(linelight);
-    worScene.remove(lineOne);
-    worScene.remove(lineTwo);
-    worScene.remove(lineThree);
-    worScene.remove(lineFour);
-    worScene.remove(lineCenter);
-    worScene.remove(lineCenterarrow);
-    worScene.remove(lineX);
-    worScene.remove(lineY);
-    worScene.remove(lineZ);
-    worScene.remove(frontPlane);
-    worScene.remove(behindPlane);
-
-    worRenderer.render( worScene, worCameraTwo );
-		worRenderer.setScissorTest( false );
+    renderer.render( scene, cameraTwo );
+		renderer.setScissorTest( false );
   }
-
-  initWorRender();
+  initGui();
+  initRender();
   initWorScene();
-  initWorCamera();
-  initWorControls();
-  initPointLight();
-  initWorLight();
-  initWorGeometry();
+  initCamera();
+  initControls();
+  initPointlight();
+  initLight();
+  // initGeometry();
+  initOBJ();
   initPlane();
   initLine();
   //initnormalLine();
   initStats();
   animate();
-  initGui();
+  
   window.onresize = onWindowResize;
 }
