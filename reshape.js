@@ -67,16 +67,9 @@ function main(){
       geometry_rotation_z:0, //沿z轴旋转角度
       geometry_size:1, //模型缩放倍数大小
       torus:function(){
-
       },
       f:function(){},
       al:function(){},
-      dolphins:function(){},
-      flowers:function(){},
-      porsche:function(){},
-      rose:function(){},
-      soccerball:function(){},
-      
     };
 
     var datGui = new dat.GUI();
@@ -354,13 +347,14 @@ function main(){
     var sty = datGui.addFolder('模型样式');
      sty.add(geometryGui,"torus").name("圆环体").onChange(
       function(){
+	      clearScene();
         scene.add(geometry);
         initGeometry();
       }
     );
     sty.add(geometryGui,"f").name("f-16").onChange(
       function(){
-        scene.remove(geometry);
+        clearScene();
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('f-16.mtl', function (material) {
@@ -377,7 +371,7 @@ function main(){
     );
     sty.add(geometryGui,"al").name("人物").onChange(
       function(){
-        scene.remove(geometry);
+        clearScene();
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('al.mtl', function (material) {
@@ -392,41 +386,38 @@ function main(){
         });
       }
     );
-    sty.add(geometryGui,"dolphins").name("海豚").onChange(
-      function(){
-        scene.remove(geometry);
-        var mtlLoader = new THREE.MTLLoader();
-        mtlLoader.setPath('data/');
-        mtlLoader.load('dolphins.mtl', function (material) {
-            var objLoader = new THREE.OBJLoader();
-            objLoader.setMaterials(material);
-            objLoader.setPath('data/');
-            objLoader.load('dolphins.obj', function (geometry) {
-            geometry.scale.set(3, 3, 3);
-            geometry.position.set(6,-8,0);
-            scene.add(geometry);
-            })
-        });
-      }
-    );
-    sty.add(geometryGui,"flowers").name("鲜花").onChange(
-      function(){
-      }
-    );
-    sty.add(geometryGui,"porsche").name("跑车").onChange(
-      function(){
-      }
-    );
-    sty.add(geometryGui,"rose").name("玫瑰").onChange(
-      function(){
-      }
-    );
-    sty.add(geometryGui,"soccerball").name("足球").onChange(
-      function(){
-      }
-    );
-
     }
+function clearScene(){
+	// 从scene中删除模型并释放内存
+	if(myObjects.length > 0){		
+		for(var i = 0; i< myObjects.length; i++){
+			var currObj = myObjects[i];
+			// 判断类型
+			if(currObj instanceof THREE.Scene){
+				var children = currObj.children;
+				for(var i = 0; i< children.length; i++){
+					deleteGroup(children[i]);
+				}	
+			}else{				
+				deleteGroup(currObj);
+			}
+			scene.remove(currObj);
+		}
+	}
+}
+
+// 删除group，释放内存
+function deleteGroup(group) {
+	//console.log(group);
+    if (!group) return;
+    // 删除掉所有的模型组内的mesh
+    group.traverse(function (item) {
+        if (item instanceof THREE.Mesh) {
+            item.geometry.dispose(); // 删除几何体
+            item.material.dispose(); // 删除材质
+        }
+    });
+}
   //添加模型
   var geometry,material;
   var radius=10,tube=3,radialSegments=16,tubularSegments=100,arc=2*PI;
