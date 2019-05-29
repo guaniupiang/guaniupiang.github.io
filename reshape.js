@@ -347,14 +347,14 @@ function main(){
     var sty = datGui.addFolder('模型样式');
      sty.add(geometryGui,"torus").name("圆环体").onChange(
       function(){
-	      clearScene();
+	      THREE.Cache.clear();
         scene.add(geometry);
         initGeometry();
       }
     );
     sty.add(geometryGui,"f").name("f-16").onChange(
       function(){
-        clearScene();
+        THREE.Cache.clear();
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('f-16.mtl', function (material) {
@@ -371,7 +371,7 @@ function main(){
     );
     sty.add(geometryGui,"al").name("人物").onChange(
       function(){
-        clearScene();
+        THREE.Cache.clear();
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('al.mtl', function (material) {
