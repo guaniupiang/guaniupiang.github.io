@@ -347,14 +347,14 @@ function main(){
     var sty = datGui.addFolder('模型样式');
      sty.add(geometryGui,"torus").name("圆环体").onChange(
       function(){
-	      THREE.Cache.clear();
+	      deleteGroup(geometry);
         scene.add(geometry);
         initGeometry();
       }
     );
     sty.add(geometryGui,"f").name("f-16").onChange(
       function(){
-        THREE.Cache.clear();
+        deleteGroup(geometry);
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('f-16.mtl', function (material) {
@@ -371,7 +371,7 @@ function main(){
     );
     sty.add(geometryGui,"al").name("人物").onChange(
       function(){
-        THREE.Cache.clear();
+        deleteGroup(geometry);
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('al.mtl', function (material) {
@@ -387,38 +387,22 @@ function main(){
       }
     );
     }
-	var myObjects;
-function clearScene(){
-	// 从scene中删除模型并释放内存
-	if(myObjects.length > 0){		
-		for(var i = 0; i< myObjects.length; i++){
-			var currObj = myObjects[i];
-			// 判断类型
-			if(currObj instanceof THREE.Scene){
-				var children = currObj.children;
-				for(var i = 0; i< children.length; i++){
-					deleteGroup(children[i]);
-				}	
-			}else{				
-				deleteGroup(currObj);
-			}
-			scene.remove(currObj);
-		}
-	}
-}
-
-// 删除group，释放内存
-function deleteGroup(group) {
-	//console.log(group);
+//删除group
+function deleteGroup(name) {
+    let group = scene.getObjectByName(name);
     if (!group) return;
-    // 删除掉所有的模型组内的mesh
+    //删除掉所有的模型组内的mesh
     group.traverse(function (item) {
         if (item instanceof THREE.Mesh) {
-            item.geometry.dispose(); // 删除几何体
-            item.material.dispose(); // 删除材质
+            item.geometry.dispose(); //删除几何体
+            item.material.dispose(); //删除材质
         }
     });
+ 
+    scene.remove(group);
 }
+
+
   //添加模型
   var geometry,material;
   var radius=10,tube=3,radialSegments=16,tubularSegments=100,arc=2*PI;
