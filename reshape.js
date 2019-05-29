@@ -282,7 +282,7 @@ function initWorGeometry(){
     	'data/f-16.obj',
     	// called when resource is loaded
     	function ( object ) {
-    		scene.add( object );
+    		worscene.add( object );
     	},
     	// called when loading is in progresses
     	function ( xhr ) {
