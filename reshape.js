@@ -414,8 +414,8 @@ function main(){
             // wing2.material.side = THREE.DoubleSide;
 
             //将模型缩放并添加到场景当中
-            object.scale.set(2, 2, 2);
-	    object.position.set(8,-20,0);
+            object.scale.set(3, 3, 3);
+	    object.position.set(4,-10,0);
             scene.add(object);
 		
         })
