@@ -273,29 +273,27 @@ function main(){
     );    
   }
 
-  //材料
-  var geometry,material;
-  var radius=10,tube=3,radialSegments=16,tubularSegments=100,arc=2*PI;
-  function initWorGeometry(){
-    geometry = new THREE.Mesh(
-      new THREE.TorusGeometry( radius, tube, radialSegments, tubularSegments, arc ),
-      material = new THREE.MeshPhongMaterial({ 
-      color: 0x4499ff,
-      transparent:true,
-      opacity:1,
-      shininess:100,
-      specular:0x4499ff,
-      reflectivity:0,
-      emissive:0x000000,//发出的光,默认为黑色
-      emissiveIntensity:1,
-
-      lights:true,
-      })
-    );//材质对象
-    geometry.position.set(0, 0, 0);
-    geometry.castShadow = true;
-    worScene.add(geometry);
-  }
+function initOBJ(){
+      // instantiate a loader
+    var loader = new THREE.OBJLoader();
+    // load a resource
+    loader.load(
+    	// resource URL
+    	'data/f-16.obj',
+    	// called when resource is loaded
+    	function ( object ) {
+    		scene.add( object );
+    	},
+    	// called when loading is in progresses
+    	function ( xhr ) {
+    		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+    	},
+    	// called when loading has errors
+    	function ( error ) {
+    		console.log( 'An error happened :'+error );
+    	}
+    );
+}
 
   //照相机
   var worCamera;
