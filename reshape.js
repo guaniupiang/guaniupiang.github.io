@@ -352,9 +352,10 @@ function main(){
       }
     );
     var sty = datGui.addFolder('模型样式');
-    sty.add(geometryGui,"torus").name("圆环体").onChange(
+     sty.add(geometryGui,"torus").name("圆环体").onChange(
       function(){
         scene.add(geometry);
+        initGeometry();
       }
     );
     sty.add(geometryGui,"f").name("f-16").onChange(
@@ -366,10 +367,10 @@ function main(){
             var objLoader = new THREE.OBJLoader();
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
-            objLoader.load('f-16.obj', function (object) {
-            object.scale.set(5, 5, 5);
-            object.position.set(0,0,0);
-            scene.add(object);
+            objLoader.load('f-16.obj', function (geometry) {
+            geometry.scale.set(3, 3, 3);
+            geometry.position.set(6,-8,0);
+            scene.add(geometry);
             })
         });
       }
@@ -377,31 +378,38 @@ function main(){
     sty.add(geometryGui,"al").name("人物").onChange(
       function(){
         scene.remove(geometry);
+        var mtlLoader = new THREE.MTLLoader();
+        mtlLoader.setPath('data/');
+        mtlLoader.load('al.mtl', function (material) {
+            var objLoader = new THREE.OBJLoader();
+            objLoader.setMaterials(material);
+            objLoader.setPath('data/');
+            objLoader.load('al.obj', function (geometry) {
+            geometry.scale.set(3, 3, 3);
+            geometry.position.set( 0, 0, 0);
+            scene.add(geometry);
+            })
+        });
       }
     );
     sty.add(geometryGui,"dolphins").name("海豚").onChange(
       function(){
-        scene.remove(geometry);
       }
     );
     sty.add(geometryGui,"flowers").name("鲜花").onChange(
       function(){
-        scene.remove(geometry);
       }
     );
     sty.add(geometryGui,"porsche").name("跑车").onChange(
       function(){
-        scene.remove(geometry);
       }
     );
     sty.add(geometryGui,"rose").name("玫瑰").onChange(
       function(){
-        scene.remove(geometry);
       }
     );
     sty.add(geometryGui,"soccerball").name("足球").onChange(
       function(){
-        scene.remove(geometry);
       }
     );
 
