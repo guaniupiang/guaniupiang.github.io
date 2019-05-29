@@ -6,7 +6,7 @@ function main(){
   //ctx.fillStyle="0xffffff";
   //ctx.fillRect(100,350,150,100); 
   //ctx.fillText("abcdefghijklmnopqrstuvwxyzcvzx",10,10);
-  information.innerHTML="拖动鼠标左键/右键/中键可以旋转/移动/放大缩小模型，通过右侧控制面板点击参数类型滑动改变模型参数";
+  information.innerHTML="拖动鼠标左键/右键/中键可以旋转/移动/缩放模型，通过右侧控制面板点击参数类型滑动改变模型参数";
   
 
 
@@ -66,6 +66,17 @@ function main(){
       geometry_rotation_y:0, //沿y轴旋转角度
       geometry_rotation_z:0, //沿z轴旋转角度
       geometry_size:1, //模型缩放倍数大小
+      torus:function(){
+
+      },
+      f:function(){},
+      al:function(){},
+      dolphins:function(){},
+      flowers:function(){},
+      porsche:function(){},
+      rose:function(){},
+      soccerball:function(){},
+      
     };
 
     var datGui = new dat.GUI();
@@ -339,118 +350,139 @@ function main(){
           material.emissive.set(geometryGui.material_color);
         }
       }
-    );    
-  }
-
-  // //添加模型
-  // var geometry,material;
-  // var radius=10,tube=3,radialSegments=16,tubularSegments=100,arc=2*PI;
-  // function initGeometry(){
-  //   geometry = new THREE.Mesh(
-  //     new THREE.TorusGeometry( radius, tube, radialSegments, tubularSegments, arc ),
-  //     material = new THREE.MeshPhongMaterial({ 
-  //     color: 0x4499ff,
-  //     transparent:true,
-  //     opacity:1,
-  //     shininess:100,
-  //     specular:0x4499ff,
-  //     reflectivity:0,
-  //     emissive:0x000000,//发出的光,默认为黑色
-  //     emissiveIntensity:1,
-  //     lights:true,
-  //     })
-  //   );//材质对象
-  //   geometry.position.set(geometryGui.geometry_pos_x, geometryGui.geometry_pos_y, geometryGui.geometry_pos_z);
-  //   geometry.rotation.set(geometryGui.geometry_rotation_x,geometryGui.geometry_rotation_y,geometryGui.geometry_rotation_z);  
-  //   geometry.castShadow = true;
-  //   scene.add(geometry);
-  // }
-
-
-  function initOBJ(){
-    //   // instantiate a loader
-    // var loader = new THREE.OBJLoader();
-    // // load a resource
-    // loader.load(
-    // 	// resource URL
-    // 	'data/f-16.obj',
-    // 	// called when resource is loaded
-    // 	function ( object ) {
-    // 		scene.add( object );
-    // 	},
-    // 	// called when loading is in progresses
-    // 	function ( xhr ) {
-    // 		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-    // 	},
-    // 	// called when loading has errors
-    // 	function ( error ) {
-    // 		console.log( 'An error happened :'+error );
-    // 	}
-    // );
-
-    var mtlLoader = new THREE.MTLLoader();
-    mtlLoader.setPath('data/');
-    //加载mtl文件
-    mtlLoader.load('f-16.mtl', function (material) {
-        var objLoader = new THREE.OBJLoader();
-        //设置当前加载的纹理
-        objLoader.setMaterials(material);
-        objLoader.setPath('data/');
-        objLoader.load('f-16.obj', function (object) {
-
-            // //获取两个翅膀的位置
-            // var wing2 = object.children[5];
-            // var wing1 = object.children[4];
-
-            // //设置两个翅膀的透明度
-            // wing1.material.opacity = 0.6;
-            // wing1.material.transparent = true;
-            // wing1.material.depthTest = false;
-            // wing1.material.side = THREE.DoubleSide;
-
-            // wing2.material.opacity = 0.6;
-            // wing2.material.depthTest = false;
-            // wing2.material.transparent = true;
-            // wing2.material.side = THREE.DoubleSide;
-
-            //将模型缩放并添加到场景当中
-            object.scale.set(3, 3, 3);
-	    object.position.set(4,-10,0);
+    );
+    var sty = datGui.addFolder('模型样式');
+    sty.add(geometryGui,"torus").name("圆环体").onChange(
+      function(){
+        scene.add(geometry);
+      }
+    );
+    sty.add(geometryGui,"f").name("f-16").onChange(
+      function(){
+        scene.remove(geometry);
+        var mtlLoader = new THREE.MTLLoader();
+        mtlLoader.setPath('data/');
+        mtlLoader.load('f-16.mtl', function (material) {
+            var objLoader = new THREE.OBJLoader();
+            objLoader.setMaterials(material);
+            objLoader.setPath('data/');
+            objLoader.load('f-16.obj', function (object) {
+            object.scale.set(5, 5, 5);
+            object.position.set(0,0,0);
             scene.add(object);
-		
-        })
-    });
+            })
+        });
+      }
+    );
+    sty.add(geometryGui,"al").name("人物").onChange(
+      function(){
+        scene.remove(geometry);
+      }
+    );
+    sty.add(geometryGui,"dolphins").name("海豚").onChange(
+      function(){
+        scene.remove(geometry);
+      }
+    );
+    sty.add(geometryGui,"flowers").name("鲜花").onChange(
+      function(){
+        scene.remove(geometry);
+      }
+    );
+    sty.add(geometryGui,"porsche").name("跑车").onChange(
+      function(){
+        scene.remove(geometry);
+      }
+    );
+    sty.add(geometryGui,"rose").name("玫瑰").onChange(
+      function(){
+        scene.remove(geometry);
+      }
+    );
+    sty.add(geometryGui,"soccerball").name("足球").onChange(
+      function(){
+        scene.remove(geometry);
+      }
+    );
 
-    // //加载OBJ格式的模型
-    // var loader = new THREE.OBJLoader();
-    // loader.load("data/f-16.obj",function (loadedMesh) {
-    //     var material = new THREE.MeshLambertMaterial({color: 0x5C3A21});
-
-    //     // 加载完obj文件是一个场景组，遍历它的子元素，赋值纹理并且更新面和点的发现了
-    //     loadedMesh.children.forEach(function (child) {
-    //         child.material = material;
-    //         child.geometry.computeFaceNormals();
-    //         child.geometry.computeVertexNormals();
-    //     });
-
-    //     //模型放大一百倍
-    //     loadedMesh.scale.set(100, 100, 100);
-    //     scene.add(loadedMesh);
-    // });
-
-
+    }
+  //添加模型
+  var geometry,material;
+  var radius=10,tube=3,radialSegments=16,tubularSegments=100,arc=2*PI;
+  function initGeometry(){
+    geometry = new THREE.Mesh(
+      new THREE.TorusGeometry( radius, tube, radialSegments, tubularSegments, arc ),
+      material = new THREE.MeshPhongMaterial({ 
+      color: 0x4499ff,
+      transparent:true,
+      opacity:1,
+      shininess:100,
+      specular:0x4499ff,
+      reflectivity:0,
+      emissive:0x000000,//发出的光,默认为黑色
+      emissiveIntensity:1,
+      lights:true,
+      })
+    );//材质对象
+    geometry.position.set(geometryGui.geometry_pos_x, geometryGui.geometry_pos_y, geometryGui.geometry_pos_z);
+    geometry.rotation.set(geometryGui.geometry_rotation_x,geometryGui.geometry_rotation_y,geometryGui.geometry_rotation_z);  
+    geometry.castShadow = true;
+    scene.add(geometry);
   }
-  // // instantiate the loader
+
+
   // function initOBJ(){
-  //   var loader = new THREE.OBJLoader2();
+  //   //   // instantiate a loader
+  //   // var loader = new THREE.OBJLoader();
+  //   // // load a resource
+  //   // loader.load(
+  //   // 	// resource URL
+  //   // 	'data/f-16.obj',
+  //   // 	// called when resource is loaded
+  //   // 	function ( object ) {
+  //   // 		scene.add( object );
+  //   // 	},
+  //   // 	// called when loading is in progresses
+  //   // 	function ( xhr ) {
+  //   // 		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+  //   // 	},
+  //   // 	// called when loading has errors
+  //   // 	function ( error ) {
+  //   // 		console.log( 'An error happened :'+error );
+  //   // 	}
+  //   // );
 
-  //   // function called on successful load
-  //   var callbackOnLoad = function ( event ) {
-  //     scene.add( event.detail.loaderRootNode );
-  //   };
+    // var mtlLoader = new THREE.MTLLoader();
+    // mtlLoader.setPath('data/');
+    // //加载mtl文件
+    // mtlLoader.load('f-16.mtl', function (material) {
+    //     var objLoader = new THREE.OBJLoader();
+    //     //设置当前加载的纹理
+    //     objLoader.setMaterials(material);
+    //     objLoader.setPath('data/');
+    //     objLoader.load('f-16.obj', function (object) {
 
-  //   // load a resource from provided URL synchronously
-  //   loader.load('data/f-16.obj', callbackOnLoad, null, null, null, false );
+    //         // //获取两个翅膀的位置
+    //         // var wing2 = object.children[5];
+    //         // var wing1 = object.children[4];
+
+    //         // //设置两个翅膀的透明度
+    //         // wing1.material.opacity = 0.6;
+    //         // wing1.material.transparent = true;
+    //         // wing1.material.depthTest = false;
+    //         // wing1.material.side = THREE.DoubleSide;
+
+    //         // wing2.material.opacity = 0.6;
+    //         // wing2.material.depthTest = false;
+    //         // wing2.material.transparent = true;
+    //         // wing2.material.side = THREE.DoubleSide;
+
+    //         //将模型缩放并添加到场景当中
+    //         object.scale.set(5, 5, 5);
+    //         object.position.set(0,0,0);
+    //         scene.add(object);
+    //     })
+    // });
   // }
 
   //照相机
@@ -759,8 +791,8 @@ function main(){
   initControls();
   initPointlight();
   initLight();
-  // initGeometry();
-  initOBJ();
+  initGeometry();
+  //initOBJ();
   initPlane();
   initLine();
   //initnormalLine();
