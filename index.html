@@ -27,12 +27,6 @@
 				width: 100%;
 				padding: 5px;
 			}
-			/* a { 
-				color: #ffffff; 
-				text-decoration:none;
-			}
-			#webglmessage a { color:#da0 }
-			 */
 			#btn {
 				position: absolute;
 				top: 0%;
@@ -43,6 +37,8 @@
 				background: #ec35e6;
 				color: rgb(255, 200, 0);
 				cursor: pointer;
+				font-family:"STHupo";
+				font-size:20px;
         	}
 			.box {
 				float: left;
@@ -61,8 +57,6 @@
 			aside ul li {
 				height: 40px;
 				line-height: 40px;
-				border-top: 1px solid #fff;
-				border-bottom: 1px solid #fff;
 				list-style-type: none;
 				text-align: center;
 			}
@@ -74,22 +68,30 @@
 				color: #fff;
 				display: block;
 				font-size:20px;
+				font-family:"STHupo";
 			}
 			
 			aside ul li a:hover {
 				background: rgb(255, 200, 0);
 			}
 			h2{
+				font-family:"STCaiyun";
 				font-size:20px;
 				color: rgb(255, 200, 0);
 			}
 			h3{
+				font-family:"STHupo";
 				font-size:36px;
 				color: rgb(255, 200, 0);
 			}
 			h4{
-				font-size:18px;
-				color: rgb(255, 200, 0);
+				font-family: "Roboto Slab";
+				font-weight: 100px;
+				font-size: 18px;
+				background: linear-gradient(330deg, #000000 0%, #70e000 25%, #00dddd 50%, #7800f0 75%, #e00606 100%);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				line-height: 20px;
 			}
 		</style>
 	</head>
@@ -103,19 +105,20 @@
 				<img src="textures/guaniupiang.png" alt="Pulpit rock" width="180" height="180">
 				<h3>GuaniuPiang</h3>
 				<br>
-				<li><a href="#">webgl教学资源：</a></li>
-				<li onClick="location.href='lightmaterial.html'"><a href="index.html">Light & Material</a></li>
-				<br><br><br>
-				<li onClick="location.href='index.html'"><a href="#">webgl精彩样例：</a></li>
-				<li onClick="location.href='index.html'"><a href="#">MENU TITLE 3</a></li>
-				<li onClick="location.href='index.html'"><a href="#">MENU TITLE 4</a></li>
-				<li onClick="location.href='index.html'"><a href="#">MENU TITLE 5</a></li>
-				<li onClick="location.href='index.html'"><a href="#">MENU TITLE 6</a></li>
-				<li onClick="location.href='index.html'"><a href="#">MENU TITLE 7</a></li>
-				<br><br><br><br><br><br>
-			
+				<li><a href="#"><h2>webgl教学资源 ：</h2></a></li>
+				<li onClick="location.href='lightmaterial.html'" ><a href="#">Light & Material</a></li>
+				<br>
+				<li onClick="location.href='lightmaterial.html'"><a href="#"><h2>webgl精彩样例 ：</h2></a></li>
+				<li onClick="location.href='https://gorescript.com/classic/'"><a href="#">Shoot Game</a></li>
+				<li onClick="location.href='http://hexgl.bkcore.com/play/'"><a href="#">Airship Game</a></li>
+				<li onClick="location.href='https://showroom.littleworkshop.fr/'"><a href="#">House Furniture</a></li>
+				<li onClick="location.href='https://2050.earth/'"><a href="#">Wandering Earth</a></li>
+				<li onClick="location.href='https://demos.littleworkshop.fr/infinitown'"><a href="#">Intelligent City</a></li>
+				<li onClick="location.href='https://worlddraw.withgoogle.com/'"><a href="#">World Depict</a></li>
+				<li onClick="location.href='https://threejs.org/'"><a href="#"><h2>更多精彩</h2></a></li>
+				<br>
 			</ul>
-			<img src="textures/nx.jpg" float="left" alt="Pulpit rock" width="30" height="30"><h4>guaniupiang@gmail.com</h4>
+			<a href="#"><img src="textures/nx.jpg" onClick="location.href='http://gmail.google.com'" alt="Pulpit rock" width="30" height="30"></a><h4>Contact Me: guaniupiang@gmail.com</h4>
 			<!-- <img src="textures/nx.jpg" alt="Pulpit rock" width="30" height="30"><br>
 			<img src="textures/nx.jpg" alt="Pulpit rock" width="30" height="30"> -->
 		</aside>
