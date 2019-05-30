@@ -6,7 +6,7 @@ function main(){
   //ctx.fillStyle="0xffffff";
   //ctx.fillRect(100,350,150,100); 
   //ctx.fillText("abcdefghijklmnopqrstuvwxyzcvzx",10,10);
-  information.innerHTML="拖动鼠标左键/右键/中键可以旋转/移动/缩放模型，通过右侧控制面板点击参数类型滑动改变模型参数";
+  information.innerHTML="<h3>拖动鼠标左键/右键/中键可以旋转/移动/缩放模型，通过右侧控制面板点击参数类型滑动改变模型参数，<br>模型样式改变需要加载一定的时间</h3>";
   
 
 
@@ -24,7 +24,6 @@ function main(){
   var gui,geometryGui,add_pointlight=true,add_spotlight=true,add_ambientlight=true;
   const PI=3.1415926;
   //var tag=true; //解决显示信息（innerHTML）所带来的的性能问题
-	var geometry2;
   function initGui(){
     //声明一个保存需求修改的相关数据的对象
     gui = {
@@ -68,9 +67,16 @@ function main(){
       geometry_rotation_z:0, //沿z轴旋转角度
       geometry_size:1, //模型缩放倍数大小
       torus:function(){
+
       },
       f:function(){},
       al:function(){},
+      dolphins:function(){},
+      flowers:function(){},
+      porsche:function(){},
+      rose:function(){},
+      soccerball:function(){},
+      
     };
 
     var datGui = new dat.GUI();
@@ -89,28 +95,30 @@ function main(){
             scene.remove( point );
             add_pointlight=false;
           }
+          information.innerHTML="<h3>if(add_pointlight==false){<br>scene.add( point ); add_pointlight=true;<br>}else{<br>scene.remove( point ); add_pointlight=false;}</h3>";
     });
     poi.addColor(gui,"point_color").name('点光源颜色').onChange(
       function(){
         point.color.set(gui.point_color);
         pointMat.emissive.set(gui.point_color);
-          information.innerHTML="color";
+          information.innerHTML="<h3>point.color.set( gui.point_color );<br>pointMat.emissive.set( gui.point_color );</h3>";
       });
     poi.add(gui,"light_pos_x",-20,20).name('x轴坐标').onChange(
       function(){
         point.position.x = gui.light_pos_x;
-        information.innerHTML="xvsd,.jfhakjfhkladjfhlakjdshfkadjshflasjdhfajdshfadjhflajdf";
+        information.innerHTML="<h3>point.position.x = gui.light_pos_x;</h3>";
       }
     );
     poi.add(gui,"light_pos_y",-20,20).name('y轴坐标').onChange(
       function(){
         point.position.y = gui.light_pos_y;
-          information.innerHTML="y";
+          information.innerHTML="<h3>point.position.y = gui.light_pos_y;</h3>";
       }
     );
     poi.add(gui,"light_pos_z",-20,20).name('z轴坐标').onChange(
       function(){
         point.position.z = gui.light_pos_z;
+        information.innerHTML="<h3>point.position.z = gui.light_pos_z;</h3>";
       }
     );
     
@@ -132,41 +140,49 @@ function main(){
           scene.remove( spot );
           add_spotlight=false;
         }
+        information.innerHTML="<h3>if(add_spotlight==false){<br>scene.add(spot); add_spotlight=true;<br>}else{<br>scene.remove( spot ); add_spotlight=false;}</h3>";
       }
     );
     spo.add(gui,"spot_pos_x",-100,100).name('x轴坐标').onChange(
       function(){
         spot.position.x = gui.spot_pos_x;
+        information.innerHTML="<h3>spot.position.x = gui.spot_pos_x;</h3>";
       }
     );
     spo.add(gui,"spot_pos_y",-100,100).name('y轴坐标').onChange(
       function(){
         spot.position.y = gui.spot_pos_y;
+        information.innerHTML="<h3>spot.position.y = gui.spot_pos_y;</h3>";
       }
     );
     spo.add(gui,"spot_pos_z",-100,100).name('z轴坐标').onChange(
       function(){
         spot.position.z = gui.spot_pos_z;
+        information.innerHTML="<h3>spot.position.z = gui.spot_pos_z;</h3>";
       }
     );
     spo.add(gui,"spot_intensity",0,3).name('光照强度').onChange(
       function(){
-        spot.intensity=gui.spot_intensity;
+        spot.intensity = gui.spot_intensity;
+        information.innerHTML="<h3>spot.intensity = gui.spot_intensity;</h3>";
       }
     );
     spo.add(gui,"spot_decay",0,5).name('距离衰减量').onChange(
       function(){
-        spot.decay=gui.spot_decay;
+        spot.decay = gui.spot_decay;
+        information.innerHTML="<h3>spot.decay = gui.spot_decay;</h3>";
       }
     );
     spo.add(gui,"spot_angle",0,0.8).name('光线散射角度').onChange(
       function(){
-        spot.angle=gui.spot_angle;
+        spot.angle = gui.spot_angle;
+        information.innerHTML="<h3>spot.angle = gui.spot_angle;</h3>";
       }
     );
     spo.add(gui,"spot_penumbra",0,1).name('半影衰减百分比').onChange(
       function(){
-        spot.penumbra=gui.spot_penumbra;
+        spot.penumbra = gui.spot_penumbra;
+        information.innerHTML="<h3>spot.penumbra = gui.spot_penumbra;</h3>";
       }
     );
    
@@ -190,21 +206,25 @@ function main(){
           scene.remove(ambientBlue);
           add_ambientlight=false;
         }
+        information.innerHTML="<h3>if(add_ambientlight==false){<br>scene.add(ambientRed);scene.add(ambientGreen);scene.add(ambientBlue);<br>add_ambientlight=true;<br>}else{<br>scene.remove(ambientRed);scene.remove(ambientGreen);scene.remove(ambientBlue);<br>add_ambientlight=false;}</h3>";
       }
     );
     amb.add(gui,"ambientred_intensity",0,1).name('红光强度').onChange(
       function(){
         ambientRed.intensity = gui.ambientred_intensity;
+        information.innerHTML="<h3>ambientRed.intensity = gui.ambientred_intensity;</h3>";
       }
     );
     amb.add(gui,"ambientgreen_intensity",0,1).name('绿光强度').onChange(
       function(){
         ambientGreen.intensity = gui.ambientgreen_intensity;
+        information.innerHTML="<h3>ambientGreen.intensity = gui.ambientgreen_intensity;</h3>";
       }
     );
     amb.add(gui,"ambientblue_intensity",0,1).name('蓝光强度').onChange(
       function(){
         ambientBlue.intensity = gui.ambientblue_intensity;
+        information.innerHTML="<h3>ambientBlue.intensity = gui.ambientblue_intensity;</h3>";
       }
     );
    
@@ -213,16 +233,19 @@ function main(){
     mat.add(geometryGui,"geometry_shininess",0,200).name('高亮程度').onChange(
       function(){
         material.shininess = geometryGui.geometry_shininess;
+        information.innerHTML="<h3>material.shininess = geometryGui.geometry_shininess;</h3>";
       }
     );
     mat.addColor(geometryGui,"material_specular").name('高光颜色').onChange(
       function(){
-        material.specular.set(geometryGui.material_specular);
+        material.specular.set( geometryGui.material_specular );
+        information.innerHTML="<h3>material.specular.set( geometryGui.material_specular );</h3>";
       }
     );
     mat.addColor(geometryGui,"material_color").name('放射光颜色').onChange(
       function(){
-        material.emissive.set(geometryGui.material_color);
+        material.emissive.set( geometryGui.material_color );
+        information.innerHTML="<h3>material.emissive.set( geometryGui.material_color );</h3>";
       }
     );
 
@@ -230,37 +253,37 @@ function main(){
     geo.add(geometryGui,"geometry_pos_x",-5,5).name('沿x轴平移').onChange(
       function(){
         geometry.position.x = geometryGui.geometry_pos_x;   
-          information.innerHTML="xx";
+        information.innerHTML="<h3>Tx = geometryGui.geometry_pos_x;<br>var u_Translation = gl.getUniformLocation( gl.program, 'u_Translation' );<br>gl.uniform4f( u_Translation, Tx, Ty, Tz, 0.0 );</h3>";
       }
     );
     geo.add(geometryGui,"geometry_pos_y",-5,5).name('沿y轴平移').onChange(
       function(){
         geometry.position.y = geometryGui.geometry_pos_y;   
-          information.innerHTML="yy";
+        information.innerHTML="<h3>Ty = geometryGui.geometry_pos_y;<br>var u_Translation = gl.getUniformLocation( gl.program, 'u_Translation' );<br>gl.uniform4f( u_Translation, Tx, Ty, Tz, 0.0 );</h3>";
       }
     );
     geo.add(geometryGui,"geometry_pos_z",-5,5).name('沿z轴平移').onChange(
       function(){
         geometry.position.z = geometryGui.geometry_pos_z;   
-          information.innerHTML="zz";
+        information.innerHTML="<h3>Tz = geometryGui.geometry_pos_z;<br>var u_Translation = gl.getUniformLocation( gl.program, 'u_Translation' );<br>gl.uniform4f( u_Translation, Tx, Ty, Tz, 0.0 );</h3>";
       }
     );
     geo.add(geometryGui,"geometry_rotation_x",-2*PI,2*PI).name('沿x轴旋转').onChange(
       function(){
         geometry.rotation.x=geometryGui.geometry_rotation_x;   
-          information.innerHTML="xxx";
+        information.innerHTML="<h3>var ANGLE = geometry_rotation_x; var radian = Math.PI*ANGLE / 180.0;<br>var cosB = Math.cos(radian); var sinB = Math.sin(radian);<br>var u_CosB = gl.getUniformLocation(gl.program, 'u_CosB');<br>var u_SinB = gl.getUniformLocation(gl.program, 'u_SinB');<br>gl.uniformlf(u_CosB,cosB); gl.uniformlf(u_SinB, sinB);</h3>";
       }
     );
     geo.add(geometryGui,"geometry_rotation_y",-2*PI,2*PI).name('沿y轴旋转').onChange(
       function(){
         geometry.rotation.y=geometryGui.geometry_rotation_y;    
-          information.innerHTML="yyy";
+        information.innerHTML="<h3>var ANGLE = geometry_rotation_y; var radian = Math.PI*ANGLE / 180.0;<br>var cosB = Math.cos(radian); var sinB = Math.sin(radian);<br>var u_CosB = gl.getUniformLocation(gl.program, 'u_CosB');<br>var u_SinB = gl.getUniformLocation(gl.program, 'u_SinB');<br>gl.uniformlf(u_CosB,cosB); gl.uniformlf(u_SinB, sinB);</h3>";
       }
     );
     geo.add(geometryGui,"geometry_rotation_z",-2*PI,2*PI).name('沿z轴旋转').onChange(
       function(){
         geometry.rotation.z=geometryGui.geometry_rotation_z;   
-          information.innerHTML="zzz";
+        information.innerHTML="<h3>var ANGLE = geometry_rotation_z; var radian = Math.PI*ANGLE / 180.0;<br>var cosB = Math.cos(radian); var sinB = Math.sin(radian);<br>var u_CosB = gl.getUniformLocation(gl.program, 'u_CosB');<br>var u_SinB = gl.getUniformLocation(gl.program, 'u_SinB');<br>gl.uniformlf(u_CosB,cosB); gl.uniformlf(u_SinB, sinB);</h3>";
       }
     );
     geo.add(geometryGui,"geometry_size",0.1,1.8).name('缩放').onChange(
@@ -270,95 +293,100 @@ function main(){
         tube=geometryGui.geometry_size*3;
         initGeometry();
         material.emissive.set(geometryGui.material_color);
-        information.innerHTML="zzz";
+        information.innerHTML="<h3>var xformMatrix = new Float32Array([<br> Sx, 0.0, 0.0, 0.0,<br>0.0, Sy, 0.0, 0.0<br>0.0, 0.0, Sz, 0.0,<br>0.0, 0.0, 0.0, 1.0])</h3>";
       }
     );
 
     var  wir= geo.addFolder( '线框模式' );
     wir.add(geometryGui,"material_wireframe").name('开启线框模式').onChange(
       function(){
-        scene.remove(geometry);
-        //radius = geometryGui.geometry_radius;
-        //tube = geometryGui.geometry_tube;
-        //radialSegments = geometryGui.geometry_radialSegments;
-        //tubularSegments = geometryGui.geometry_tubularSegments;
-        //arc = geometryGui.geometry_arc;
+        scene.remove( geometry );
+        radius = geometryGui.geometry_radius;
+        tube = geometryGui.geometry_tube;
+        radialSegments = geometryGui.geometry_radialSegments;
+        tubularSegments = geometryGui.geometry_tubularSegments;
+        arc = geometryGui.geometry_arc;
         initGeometry();
-        material.wireframe=geometryGui.material_wireframe;
+        material.wireframe = geometryGui.material_wireframe;
         material.shininess = geometryGui.geometry_shininess;
-        material.specular.set(geometryGui.material_specular);
-        material.emissive.set(geometryGui.material_color);
+        material.specular.set( geometryGui.material_specular );
+        material.emissive.set( geometryGui.material_color );
+        information.innerHTML="<h3>scene.remove( geometry );<br>radius = geometryGui.geometry_radius; tube = geometryGui.geometry_tube;<br>radialSegments = geometryGui.geometry_radialSegments;<br>tubularSegments = geometryGui.geometry_tubularSegments;<br>arc = geometryGui.geometry_arc; initGeometry();<br>material.wireframe = geometryGui.material_wireframe;<br>material.shininess = geometryGui.geometry_shininess;<br>material.specular.set( geometryGui.material_specular );<br>material.emissive.set( geometryGui.material_color );</h3>";
       }
     );
     wir.add(geometryGui,"geometry_radius",1,15).name('圆环半径').onChange(
       function(){
         if(geometryGui.material_wireframe==true){
-          scene.remove(geometry);
+          scene.remove( geometry );
           radius = geometryGui.geometry_radius;
           initGeometry();
           material.wireframe=true;
           material.emissive.set(geometryGui.material_color);
+          information.innerHTML="<h3>scene.remove( geometry );<br>radius = geometryGui.geometry_radius;<br>initGeometry();<br>material.wireframe = true;<br>material.emissive.set( geometryGui.material_color );</h3>";
         }
       }
     );
     wir.add(geometryGui,"geometry_tube",0.1,7).name('管道半径').onChange(
       function(){
         if(geometryGui.material_wireframe==true){
-          scene.remove(geometry);      
+          scene.remove( geometry );      
           tube = geometryGui.geometry_tube;
           initGeometry();
-          material.wireframe=true;
-          material.emissive.set(geometryGui.material_color);
+          material.wireframe = true;
+          material.emissive.set( geometryGui.material_color );
+          information.innerHTML="<h3>scene.remove( geometry );<br>tube = geometryGui.geometry_tube;<br>initGeometry();<br>material.wireframe = true;<br>material.emissive.set( geometryGui.material_color );</h3>";
         }
       }
     );
     wir.add(geometryGui,"geometry_radialSegments",2,50).name('圆环分段数').onChange(
       function(){
         if(geometryGui.material_wireframe==true){
-          scene.remove(geometry);
+          scene.remove( geometry );
           radialSegments = geometryGui.geometry_radialSegments;
           initGeometry();
           material.wireframe=true;
-          material.emissive.set(geometryGui.material_color);
+          material.emissive.set( geometryGui.material_color );
+          information.innerHTML="<h3>scene.remove( geometry );<br>radialSegments = geometryGui.geometry_radialSegments;<br>initGeometry();<br>material.wireframe = true;<br>material.emissive.set( geometryGui.material_color );</h3>";
         }
       }
     );
     wir.add(geometryGui,"geometry_tubularSegments",3,300).name('管道分段数').onChange(
       function(){
         if(geometryGui.material_wireframe==true){
-          scene.remove(geometry);
+          scene.remove( geometry );
           tubularSegments = geometryGui.geometry_tubularSegments;
           initGeometry();
-          material.wireframe=true;
-          material.emissive.set(geometryGui.material_color);
+          material.wireframe = true;
+          material.emissive.set( geometryGui.material_color );
+          information.innerHTML="<h3>scene.remove( geometry );<br>tubularSegments = geometryGui.geometry_tubularSegments;<br>initGeometry();<br>material.wireframe = true;<br>material.emissive.set( geometryGui.material_color );</h3>";
         }
       }
     );
     wir.add(geometryGui,"geometry_arc",0.1,2*PI).name('圆环中心角').onChange(
       function(){
         if(geometryGui.material_wireframe==true){
-          scene.remove(geometry);
+          scene.remove( geometry );
           arc = geometryGui.geometry_arc;
           initGeometry();
-          material.wireframe=true;
-          material.emissive.set(geometryGui.material_color);
+          material.wireframe = true;
+          material.emissive.set( geometryGui.material_color );
+          information.innerHTML="<h3>scene.remove( geometry );<br>arc = geometryGui.geometry_arc;<br>initGeometry();<br>material.wireframe = true;<br>material.emissive.set( geometryGui.material_color );</h3>";
         }
       }
     );
+
+
+    
     var sty = datGui.addFolder('模型样式');
-     sty.add(geometryGui,"torus").name("圆环体").onChange(
+    sty.add(geometryGui,"torus").name("圆环体").onChange(
       function(){
-	      //clearScene();
-	      renderer.dispose();
-        //scene.add(geometry);
+        scene.remove(geometry);
         initGeometry();
       }
     );
     sty.add(geometryGui,"f").name("f-16").onChange(
       function(){
-        //clearScene();
-	      renderer.dispose(geometry);
-	      renderer.dispose(material);
+        scene.remove(geometry);
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('f-16.mtl', function (material) {
@@ -367,7 +395,8 @@ function main(){
             objLoader.setPath('data/');
             objLoader.load('f-16.obj', function (geometry) {
             geometry.scale.set(3, 3, 3);
-            geometry.position.set(6,-8,0);
+            geometry.position.set(5,-8,0);
+            geometry.castShadow = true;
             scene.add(geometry);
             })
         });
@@ -375,9 +404,7 @@ function main(){
     );
     sty.add(geometryGui,"al").name("人物").onChange(
       function(){
-        //clearScene();
-	      scene.remove(material);
-	      scene.remove(geometry);
+        scene.remove(geometry);
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('al.mtl', function (material) {
@@ -387,42 +414,104 @@ function main(){
             objLoader.load('al.obj', function (geometry) {
             geometry.scale.set(3, 3, 3);
             geometry.position.set( 0, 0, 0);
+            geometry.castShadow = true;
             scene.add(geometry);
             })
         });
       }
     );
+    sty.add(geometryGui,"dolphins").name("海豚").onChange(
+      function(){
+        scene.remove(geometry);
+        var mtlLoader = new THREE.MTLLoader();
+        mtlLoader.setPath('data/');
+        mtlLoader.load('dolphins.mtl', function (material) {
+            var objLoader = new THREE.OBJLoader();
+            objLoader.setMaterials(material);
+            objLoader.setPath('data/');
+            objLoader.load('dolphins.obj', function (geometry) {
+            geometry.scale.set(3, 3, 3);
+            geometry.position.set(0,0,0);
+            geometry.castShadow = true;
+            scene.add(geometry);
+            })
+        });
+      }
+    );
+    sty.add(geometryGui,"flowers").name("鲜花").onChange(
+      function(){
+        scene.remove(geometry);
+        var mtlLoader = new THREE.MTLLoader();
+        mtlLoader.setPath('data/');
+        mtlLoader.load('flowers.mtl', function (material) {
+            var objLoader = new THREE.OBJLoader();
+            objLoader.setMaterials(material);
+            objLoader.setPath('data/');
+            objLoader.load('flowers.obj', function (geometry) {
+            geometry.scale.set(3, 3, 3);
+            geometry.position.set(0,0,0);
+            geometry.castShadow = true;
+            scene.add(geometry);
+            })
+        });
+      }
+    );
+    sty.add(geometryGui,"porsche").name("跑车").onChange(
+      function(){
+        scene.remove(geometry);
+        var mtlLoader = new THREE.MTLLoader();
+        mtlLoader.setPath('data/');
+        mtlLoader.load('porsche.mtl', function (material) {
+            var objLoader = new THREE.OBJLoader();
+            objLoader.setMaterials(material);
+            objLoader.setPath('data/');
+            objLoader.load('porsche.obj', function (geometry) {
+            geometry.scale.set(3, 3, 3);
+            geometry.position.set(0,0,0);
+            geometry.castShadow = true;
+            scene.add(geometry);
+            })
+        });
+      }
+    );
+    sty.add(geometryGui,"rose").name("玫瑰").onChange(
+      function(){
+        scene.remove(geometry);
+        var mtlLoader = new THREE.MTLLoader();
+        mtlLoader.setPath('data/');
+        mtlLoader.load('rose+vase.mtl', function (material) {
+            var objLoader = new THREE.OBJLoader();
+            objLoader.setMaterials(material);
+            objLoader.setPath('data/');
+            objLoader.load('rose+vase.obj', function (geometry) {
+            geometry.scale.set(3, 3, 3);
+            geometry.position.set(0,0,0);
+            geometry.castShadow = true;
+            scene.add(geometry);
+            })
+        });
+      }
+    );
+    sty.add(geometryGui,"soccerball").name("足球").onChange(
+      function(){
+        scene.remove(geometry);
+        var mtlLoader = new THREE.MTLLoader();
+        mtlLoader.setPath('data/');
+        mtlLoader.load('soccerball.mtl', function (material) {
+            var objLoader = new THREE.OBJLoader();
+            objLoader.setMaterials(material);
+            objLoader.setPath('data/');
+            objLoader.load('soccerball.obj', function (geometry) {
+            geometry.scale.set(3, 3, 3);
+            geometry.position.set(0,0,0);
+            geometry.castShadow = true;
+            scene.add(geometry);
+            })
+        });
+      }
+    );
+
     }
-function clearScene(){
-	// 从scene中删除模型并释放内存
-	if(geometry.length > 0){		
-		for(var i = 0; i< geometry.length; i++){
-			var currObj = geometry[i];
-			
-			// 判断类型
-			if(currObj instanceof THREE.Scene){
-				var children = currObj.children;
-				for(var i = 0; i< children.length; i++){
-					deleteGroup(children[i]);
-				}	
-			}else{				
-				deleteGroup(currObj);
-			}
-			scene.remove(currObj);
-		}
-	}
-}
-function deleteGroup(group) {
-	//console.log(group);
-    if (!group) return;
-    // 删除掉所有的模型组内的mesh
-    group.traverse(function (item) {
-        if (item instanceof THREE.Mesh) {
-            item.geometry.dispose(); // 删除几何体
-            item.material.dispose(); // 删除材质
-        }
-    });
-}
   //添加模型
   var geometry,material;
   var radius=10,tube=3,radialSegments=16,tubularSegments=100,arc=2*PI;
@@ -817,4 +906,5 @@ function deleteGroup(group) {
   animate();
   
   window.onresize = onWindowResize;
+}
 }
