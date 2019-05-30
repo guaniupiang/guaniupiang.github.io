@@ -24,6 +24,7 @@ function main(){
   var gui,geometryGui,add_pointlight=true,add_spotlight=true,add_ambientlight=true;
   const PI=3.1415926;
   //var tag=true; //解决显示信息（innerHTML）所带来的的性能问题
+	var geometry2;
   function initGui(){
     //声明一个保存需求修改的相关数据的对象
     gui = {
@@ -347,41 +348,44 @@ function main(){
     var sty = datGui.addFolder('模型样式');
      sty.add(geometryGui,"torus").name("圆环体").onChange(
       function(){
-	      clearScene();
-        scene.add(geometry);
+	      //clearScene();
+	      renderer.dispose();
+        //scene.add(geometry);
         initGeometry();
       }
     );
     sty.add(geometryGui,"f").name("f-16").onChange(
       function(){
-        clearScene();
+        //clearScene();
+	      renderer.dispose();
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('f-16.mtl', function (material) {
             var objLoader = new THREE.OBJLoader();
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
-            objLoader.load('f-16.obj', function (geometry) {
-            geometry.scale.set(3, 3, 3);
-            geometry.position.set(6,-8,0);
-            scene.add(geometry);
+            objLoader.load('f-16.obj', function (geometry2) {
+            geometry2.scale.set(3, 3, 3);
+            geometry2.position.set(6,-8,0);
+            scene.add(geometry2);
             })
         });
       }
     );
     sty.add(geometryGui,"al").name("人物").onChange(
       function(){
-        clearScene();
+        //clearScene();
+	      scene.remove(geometry2);
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('al.mtl', function (material) {
             var objLoader = new THREE.OBJLoader();
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
-            objLoader.load('al.obj', function (geometry) {
-            geometry.scale.set(3, 3, 3);
-            geometry.position.set( 0, 0, 0);
-            scene.add(geometry);
+            objLoader.load('al.obj', function (geometry3) {
+            geometry3.scale.set(3, 3, 3);
+            geometry3.position.set( 0, 0, 0);
+            scene.add(geometry3);
             })
         });
       }
