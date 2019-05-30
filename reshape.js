@@ -357,17 +357,18 @@ function main(){
     sty.add(geometryGui,"f").name("f-16").onChange(
       function(){
         //clearScene();
-	      renderer.dispose();
+	      renderer.dispose(geometry);
+	      renderer.dispose(material);
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('f-16.mtl', function (material) {
             var objLoader = new THREE.OBJLoader();
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
-            objLoader.load('f-16.obj', function (geometry2) {
-            geometry2.scale.set(3, 3, 3);
-            geometry2.position.set(6,-8,0);
-            scene.add(geometry2);
+            objLoader.load('f-16.obj', function (geometry) {
+            geometry.scale.set(3, 3, 3);
+            geometry.position.set(6,-8,0);
+            scene.add(geometry);
             })
         });
       }
@@ -375,17 +376,18 @@ function main(){
     sty.add(geometryGui,"al").name("人物").onChange(
       function(){
         //clearScene();
-	      scene.remove(geometry2);
+	      scene.remove(material);
+	      scene.remove(geometry);
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('al.mtl', function (material) {
             var objLoader = new THREE.OBJLoader();
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
-            objLoader.load('al.obj', function (geometry3) {
-            geometry3.scale.set(3, 3, 3);
-            geometry3.position.set( 0, 0, 0);
-            scene.add(geometry3);
+            objLoader.load('al.obj', function (geometry) {
+            geometry.scale.set(3, 3, 3);
+            geometry.position.set( 0, 0, 0);
+            scene.add(geometry);
             })
         });
       }
