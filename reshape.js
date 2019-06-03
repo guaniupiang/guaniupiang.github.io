@@ -380,13 +380,16 @@ function main(){
     var sty = datGui.addFolder('模型样式');
     sty.add(geometryGui,"torus").name("圆环体").onChange(
       function(){
-        scene.remove(geometry);
+        //scene.remove(geometry);
+        clearScene();
         initGeometry();
+        myObjects[0]=geometry;
       }
     );
     sty.add(geometryGui,"f").name("f-16").onChange(
       function(){
-        scene.remove(geometry);
+        //scene.remove(geometry);
+        clearScene();
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('f-16.mtl', function (material) {
@@ -398,13 +401,15 @@ function main(){
             geometry.position.set(5,-8,0);
             geometry.castShadow = true;
             scene.add(geometry);
+            myObjects[0]=geometry;
             })
         });
       }
     );
     sty.add(geometryGui,"al").name("人物").onChange(
       function(){
-        scene.remove(geometry);
+        //scene.remove(geometry);
+        clearScene();
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('al.mtl', function (material) {
@@ -416,6 +421,7 @@ function main(){
             geometry.position.set( 0, 0, 0);
             geometry.castShadow = true;
             scene.add(geometry);
+            myObjects[0]=geometry;
             })
         });
       }
@@ -512,6 +518,47 @@ function main(){
     );
 
     }
+
+    /**
+ * 清除模型，模型中有 group 和 scene,需要进行判断
+ * @param scene
+ * @returns
+ */
+var myObjects = new Array();;
+function clearScene(){
+	// 从scene中删除模型并释放内存
+	if(myObjects.length > 0){		
+		for(var i = 0; i< myObjects.length; i++){
+			var currObj = myObjects[i];
+			
+			// 判断类型
+			if(currObj instanceof THREE.Scene){
+				var children = currObj.children;
+				for(var i = 0; i< children.length; i++){
+					deleteGroup(children[i]);
+				}	
+			}else{				
+				deleteGroup(currObj);
+			}
+			scene.remove(currObj);
+		}
+	}
+}
+
+// 删除group，释放内存
+function deleteGroup(group) {
+	//console.log(group);
+    if (!group) return;
+    // 删除掉所有的模型组内的mesh
+    group.traverse(function (item) {
+        if (item instanceof THREE.Mesh) {
+            item.geometry.dispose(); // 删除几何体
+            item.material.dispose(); // 删除材质
+        }
+    });
+}
+
+
   //添加模型
   var geometry,material;
   var radius=10,tube=3,radialSegments=16,tubularSegments=100,arc=2*PI;
@@ -534,6 +581,7 @@ function main(){
     geometry.rotation.set(geometryGui.geometry_rotation_x,geometryGui.geometry_rotation_y,geometryGui.geometry_rotation_z);  
     geometry.castShadow = true;
     scene.add(geometry);
+    myObjects[0]=geometry;
   }
 
 
