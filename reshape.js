@@ -383,7 +383,6 @@ function main(){
         //scene.remove(geometry);
         clearScene();
         initGeometry();
-        myObjects[0]=geometry;
       }
     );
     sty.add(geometryGui,"f").name("f-16").onChange(
@@ -402,6 +401,7 @@ function main(){
             geometry.castShadow = true;
             scene.add(geometry);
             myObjects[0]=geometry;
+            geometry.castShadow = true;
             })
         });
       }
@@ -422,13 +422,14 @@ function main(){
             geometry.castShadow = true;
             scene.add(geometry);
             myObjects[0]=geometry;
+            geometry.castShadow = true;
             })
         });
       }
     );
     sty.add(geometryGui,"dolphins").name("海豚").onChange(
       function(){
-        scene.remove(geometry);
+        clearScene();
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('dolphins.mtl', function (material) {
@@ -436,17 +437,19 @@ function main(){
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
             objLoader.load('dolphins.obj', function (geometry) {
-            geometry.scale.set(3, 3, 3);
+            geometry.scale.set(0.5, 0.5, 0.5);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
             scene.add(geometry);
+            myObjects[0]=geometry;
+            geometry.castShadow = true;
             })
         });
       }
     );
     sty.add(geometryGui,"flowers").name("鲜花").onChange(
       function(){
-        scene.remove(geometry);
+        clearScene();
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('flowers.mtl', function (material) {
@@ -454,17 +457,19 @@ function main(){
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
             objLoader.load('flowers.obj', function (geometry) {
-            geometry.scale.set(3, 3, 3);
+            geometry.scale.set(1, 1, 1);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
             scene.add(geometry);
+            myObjects[0]=geometry;
+            geometry.castShadow = true;
             })
         });
       }
     );
     sty.add(geometryGui,"porsche").name("跑车").onChange(
       function(){
-        scene.remove(geometry);
+        clearScene();
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('porsche.mtl', function (material) {
@@ -472,17 +477,19 @@ function main(){
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
             objLoader.load('porsche.obj', function (geometry) {
-            geometry.scale.set(3, 3, 3);
+            geometry.scale.set(0.5, 0.5, 0.5);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
             scene.add(geometry);
+            myObjects[0]=geometry;
+            geometry.castShadow = true;
             })
         });
       }
     );
     sty.add(geometryGui,"rose").name("玫瑰").onChange(
       function(){
-        scene.remove(geometry);
+        clearScene();
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('rose+vase.mtl', function (material) {
@@ -490,17 +497,19 @@ function main(){
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
             objLoader.load('rose+vase.obj', function (geometry) {
-            geometry.scale.set(3, 3, 3);
+            geometry.scale.set(1, 1, 1);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
             scene.add(geometry);
+            myObjects[0]=geometry;
+            geometry.castShadow = true;
             })
         });
       }
     );
     sty.add(geometryGui,"soccerball").name("足球").onChange(
       function(){
-        scene.remove(geometry);
+        clearScene();
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
         mtlLoader.load('soccerball.mtl', function (material) {
@@ -508,10 +517,12 @@ function main(){
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
             objLoader.load('soccerball.obj', function (geometry) {
-            geometry.scale.set(3, 3, 3);
+            geometry.scale.set(1, 1, 1);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
             scene.add(geometry);
+            myObjects[0]=geometry;
+            geometry.castShadow = true;
             })
         });
       }
