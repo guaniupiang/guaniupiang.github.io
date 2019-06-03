@@ -437,7 +437,7 @@ function main(){
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
             objLoader.load('dolphins.obj', function (geometry) {
-            geometry.scale.set(0.5, 0.5, 0.5);
+            geometry.scale.set(0.1, 0.1, 0.1);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
             scene.add(geometry);
@@ -457,7 +457,7 @@ function main(){
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
             objLoader.load('flowers.obj', function (geometry) {
-            geometry.scale.set(1, 1, 1);
+            geometry.scale.set(2, 2, 2);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
             scene.add(geometry);
@@ -477,7 +477,7 @@ function main(){
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
             objLoader.load('porsche.obj', function (geometry) {
-            geometry.scale.set(0.5, 0.5, 0.5);
+            geometry.scale.set(0.3, 0.3, 0.3);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
             scene.add(geometry);
@@ -497,7 +497,7 @@ function main(){
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
             objLoader.load('rose+vase.obj', function (geometry) {
-            geometry.scale.set(1, 1, 1);
+            geometry.scale.set(0.2, 0.2, 0.2);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
             scene.add(geometry);
@@ -517,7 +517,7 @@ function main(){
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
             objLoader.load('soccerball.obj', function (geometry) {
-            geometry.scale.set(1, 1, 1);
+            geometry.scale.set(3, 3, 3);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
             scene.add(geometry);
