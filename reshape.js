@@ -417,7 +417,7 @@ function main(){
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
             objLoader.load('al.obj', function (geometry) {
-            geometry.scale.set(3, 3, 3);
+            geometry.scale.set(4.5, 4.5, 4.5);
             geometry.position.set( 0, 0, 0);
             geometry.castShadow = true;
             scene.add(geometry);
@@ -437,7 +437,7 @@ function main(){
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
             objLoader.load('dolphins.obj', function (geometry) {
-            geometry.scale.set(0.1, 0.1, 0.1);
+            geometry.scale.set(-0.5, -0.5, -0.5);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
             scene.add(geometry);
@@ -457,7 +457,7 @@ function main(){
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
             objLoader.load('flowers.obj', function (geometry) {
-            geometry.scale.set(2, 2, 2);
+            geometry.scale.set(1.5, 1.5, 1.5);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
             scene.add(geometry);
