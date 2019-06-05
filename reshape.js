@@ -1,15 +1,7 @@
 function main(){
 
   var information=document.getElementById("p");
-  //var ctx=information.getContext("2d");
-  //ctx.font="30px Arial";
-  //ctx.fillStyle="0xffffff";
-  //ctx.fillRect(100,350,150,100); 
-  //ctx.fillText("abcdefghijklmnopqrstuvwxyzcvzx",10,10);
   information.innerHTML="<h3>拖动鼠标左键/右键/中键可以旋转/移动/缩放模型，通过右侧控制面板点击参数类型滑动改变模型参数，<br>模型样式改变需要加载一定的时间</h3>";
-  
-
-
 
   //场景
   var scene;
@@ -23,7 +15,6 @@ function main(){
   //初始化dat.GUI简化试验流程
   var gui,geometryGui,add_pointlight=true,add_spotlight=true,add_ambientlight=true;
   const PI=3.1415926;
-  //var tag=true; //解决显示信息（innerHTML）所带来的的性能问题
   function initGui(){
     //声明一个保存需求修改的相关数据的对象
     gui = {
@@ -76,7 +67,6 @@ function main(){
       porsche:function(){},
       rose:function(){},
       soccerball:function(){},
-      
     };
 
     var datGui = new dat.GUI();
@@ -380,14 +370,13 @@ function main(){
     var sty = datGui.addFolder('模型样式');
     sty.add(geometryGui,"torus").name("圆环体").onChange(
       function(){
-        //scene.remove(geometry);
         clearScene();
         initGeometry();
+        information.innerHTML="<h3>拖动鼠标左键/右键/中键可以旋转/移动/缩放模型，通过右侧控制面板点击参数类型滑动改变模型参数，<br>模型样式改变需要加载一定的时间</h3>";
       }
     );
     sty.add(geometryGui,"f").name("f-16").onChange(
       function(){
-        //scene.remove(geometry);
         clearScene();
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
@@ -404,11 +393,11 @@ function main(){
             geometry.castShadow = true;
             })
         });
+        information.innerHTML="<h3>拖动鼠标左键/右键/中键可以旋转/移动/缩放模型，通过右侧控制面板点击参数类型滑动改变模型参数，<br>模型样式改变需要加载一定的时间</h3>";
       }
     );
     sty.add(geometryGui,"al").name("人物").onChange(
       function(){
-        //scene.remove(geometry);
         clearScene();
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('data/');
@@ -425,6 +414,7 @@ function main(){
             geometry.castShadow = true;
             })
         });
+        information.innerHTML="<h3>拖动鼠标左键/右键/中键可以旋转/移动/缩放模型，通过右侧控制面板点击参数类型滑动改变模型参数，<br>模型样式改变需要加载一定的时间</h3>";
       }
     );
     sty.add(geometryGui,"dolphins").name("海豚").onChange(
@@ -445,6 +435,7 @@ function main(){
             geometry.castShadow = true;
             })
         });
+        information.innerHTML="<h3>拖动鼠标左键/右键/中键可以旋转/移动/缩放模型，通过右侧控制面板点击参数类型滑动改变模型参数，<br>模型样式改变需要加载一定的时间</h3>";
       }
     );
     sty.add(geometryGui,"flowers").name("鲜花").onChange(
@@ -465,6 +456,7 @@ function main(){
             geometry.castShadow = true;
             })
         });
+        information.innerHTML="<h3>拖动鼠标左键/右键/中键可以旋转/移动/缩放模型，通过右侧控制面板点击参数类型滑动改变模型参数，<br>模型样式改变需要加载一定的时间</h3>";
       }
     );
     sty.add(geometryGui,"porsche").name("跑车").onChange(
@@ -485,6 +477,7 @@ function main(){
             geometry.castShadow = true;
             })
         });
+        information.innerHTML="<h3>拖动鼠标左键/右键/中键可以旋转/移动/缩放模型，通过右侧控制面板点击参数类型滑动改变模型参数，<br>模型样式改变需要加载一定的时间</h3>";
       }
     );
     sty.add(geometryGui,"rose").name("玫瑰").onChange(
@@ -505,6 +498,7 @@ function main(){
             geometry.castShadow = true;
             })
         });
+        information.innerHTML="<h3>拖动鼠标左键/右键/中键可以旋转/移动/缩放模型，通过右侧控制面板点击参数类型滑动改变模型参数，<br>模型样式改变需要加载一定的时间</h3>";
       }
     );
     sty.add(geometryGui,"soccerball").name("足球").onChange(
@@ -525,50 +519,47 @@ function main(){
             geometry.castShadow = true;
             })
         });
+        information.innerHTML="<h3>拖动鼠标左键/右键/中键可以旋转/移动/缩放模型，通过右侧控制面板点击参数类型滑动改变模型参数，<br>模型样式改变需要加载一定的时间</h3>";
       }
     );
+  }
 
-    }
-
-    /**
- * 清除模型，模型中有 group 和 scene,需要进行判断
- * @param scene
- * @returns
- */
-var myObjects = new Array();;
-function clearScene(){
-	// 从scene中删除模型并释放内存
-	if(myObjects.length > 0){		
-		for(var i = 0; i< myObjects.length; i++){
-			var currObj = myObjects[i];
-			
-			// 判断类型
-			if(currObj instanceof THREE.Scene){
-				var children = currObj.children;
-				for(var i = 0; i< children.length; i++){
-					deleteGroup(children[i]);
-				}	
-			}else{				
-				deleteGroup(currObj);
-			}
-			scene.remove(currObj);
-		}
-	}
-}
-
-// 删除group，释放内存
-function deleteGroup(group) {
-	//console.log(group);
-    if (!group) return;
-    // 删除掉所有的模型组内的mesh
-    group.traverse(function (item) {
-        if (item instanceof THREE.Mesh) {
-            item.geometry.dispose(); // 删除几何体
-            item.material.dispose(); // 删除材质
+  /**
+   * 清除模型，模型中有 group 和 scene,需要进行判断
+   */
+  var myObjects = new Array();;
+  function clearScene(){
+    // 从scene中删除模型并释放内存
+    if(myObjects.length > 0){		
+      for(var i = 0; i< myObjects.length; i++){
+        var currObj = myObjects[i];
+        
+        // 判断类型
+        if(currObj instanceof THREE.Scene){
+          var children = currObj.children;
+          for(var i = 0; i< children.length; i++){
+            deleteGroup(children[i]);
+          }	
+        }else{				
+          deleteGroup(currObj);
         }
-    });
-}
+        scene.remove(currObj);
+      }
+    }
+  }
 
+  // 删除group，释放内存
+  function deleteGroup(group) {
+    //console.log(group);
+      if (!group) return;
+      // 删除掉所有的模型组内的mesh
+      group.traverse(function (item) {
+          if (item instanceof THREE.Mesh) {
+              item.geometry.dispose(); // 删除几何体
+              item.material.dispose(); // 删除材质
+          }
+      });
+  }
 
   //添加模型
   var geometry,material;
@@ -595,66 +586,10 @@ function deleteGroup(group) {
     myObjects[0]=geometry;
   }
 
-
-  // function initOBJ(){
-  //   //   // instantiate a loader
-  //   // var loader = new THREE.OBJLoader();
-  //   // // load a resource
-  //   // loader.load(
-  //   // 	// resource URL
-  //   // 	'data/f-16.obj',
-  //   // 	// called when resource is loaded
-  //   // 	function ( object ) {
-  //   // 		scene.add( object );
-  //   // 	},
-  //   // 	// called when loading is in progresses
-  //   // 	function ( xhr ) {
-  //   // 		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-  //   // 	},
-  //   // 	// called when loading has errors
-  //   // 	function ( error ) {
-  //   // 		console.log( 'An error happened :'+error );
-  //   // 	}
-  //   // );
-
-    // var mtlLoader = new THREE.MTLLoader();
-    // mtlLoader.setPath('data/');
-    // //加载mtl文件
-    // mtlLoader.load('f-16.mtl', function (material) {
-    //     var objLoader = new THREE.OBJLoader();
-    //     //设置当前加载的纹理
-    //     objLoader.setMaterials(material);
-    //     objLoader.setPath('data/');
-    //     objLoader.load('f-16.obj', function (object) {
-
-    //         // //获取两个翅膀的位置
-    //         // var wing2 = object.children[5];
-    //         // var wing1 = object.children[4];
-
-    //         // //设置两个翅膀的透明度
-    //         // wing1.material.opacity = 0.6;
-    //         // wing1.material.transparent = true;
-    //         // wing1.material.depthTest = false;
-    //         // wing1.material.side = THREE.DoubleSide;
-
-    //         // wing2.material.opacity = 0.6;
-    //         // wing2.material.depthTest = false;
-    //         // wing2.material.transparent = true;
-    //         // wing2.material.side = THREE.DoubleSide;
-
-    //         //将模型缩放并添加到场景当中
-    //         object.scale.set(5, 5, 5);
-    //         object.position.set(0,0,0);
-    //         scene.add(object);
-    //     })
-    // });
-  // }
-
   //照相机
   var camera;
   function initCamera(){
-    camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1000);
-                                          //透视投影(fov,aspect,near,far)
+    camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,1,1000); //透视投影(fov,aspect,near,far)
     camera.position.set(50,0,50);
 
     cameraTwo = new THREE.PerspectiveCamera( 60, 1, 1, 1000 );
