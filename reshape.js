@@ -397,7 +397,8 @@ function main(){
             objLoader.setPath('data/');
             objLoader.load('f-16.obj', function (geometry) {
             geometry.scale.set(3, 3, 3);
-            geometry.position.set(5,-8,0);
+            geometry.position.set(geometryGui.geometry_pos_x, geometryGui.geometry_pos_y, geometryGui.geometry_pos_z);
+            geometry.rotation.set(geometryGui.geometry_rotation_x,geometryGui.geometry_rotation_y,geometryGui.geometry_rotation_z); 
             geometry.castShadow = true;
             scene.add(geometry);
             myObjects[0]=geometry;
@@ -418,7 +419,8 @@ function main(){
             objLoader.setPath('data/');
             objLoader.load('al.obj', function (geometry) {
             geometry.scale.set(4.5, 4.5, 4.5);
-            geometry.position.set( 0, 0, 0);
+            geometry.position.set(geometryGui.geometry_pos_x, geometryGui.geometry_pos_y, geometryGui.geometry_pos_z);
+            geometry.rotation.set(geometryGui.geometry_rotation_x,geometryGui.geometry_rotation_y,geometryGui.geometry_rotation_z); 
             geometry.castShadow = true;
             scene.add(geometry);
             myObjects[0]=geometry;
@@ -437,8 +439,9 @@ function main(){
             objLoader.setMaterials(material);
             objLoader.setPath('data/');
             objLoader.load('dolphins.obj', function (geometry) {
-            geometry.scale.set(0.0001, 0.0001, 0.0001);
-            geometry.position.set(0,0,0);
+            geometry.scale.set(0.01, 0.01, 0.01);
+            geometry.position.set(geometryGui.geometry_pos_x, geometryGui.geometry_pos_y, geometryGui.geometry_pos_z);
+            geometry.rotation.set(geometryGui.geometry_rotation_x,geometryGui.geometry_rotation_y,geometryGui.geometry_rotation_z); 
             geometry.castShadow = true;
             scene.add(geometry);
             myObjects[0]=geometry;
@@ -458,7 +461,8 @@ function main(){
             objLoader.setPath('data/');
             objLoader.load('flowers.obj', function (geometry) {
             geometry.scale.set(1.5, 1.5, 1.5);
-            geometry.position.set(0,0,0);
+            geometry.position.set(geometryGui.geometry_pos_x, geometryGui.geometry_pos_y, geometryGui.geometry_pos_z);
+            geometry.rotation.set(geometryGui.geometry_rotation_x,geometryGui.geometry_rotation_y,geometryGui.geometry_rotation_z); 
             geometry.castShadow = true;
             scene.add(geometry);
             myObjects[0]=geometry;
@@ -478,7 +482,8 @@ function main(){
             objLoader.setPath('data/');
             objLoader.load('porsche.obj', function (geometry) {
             geometry.scale.set(0.3, 0.3, 0.3);
-            geometry.position.set(0,0,0);
+            geometry.position.set(geometryGui.geometry_pos_x, geometryGui.geometry_pos_y, geometryGui.geometry_pos_z);
+            geometry.rotation.set(geometryGui.geometry_rotation_x,geometryGui.geometry_rotation_y,geometryGui.geometry_rotation_z); 
             geometry.castShadow = true;
             scene.add(geometry);
             myObjects[0]=geometry;
@@ -498,7 +503,8 @@ function main(){
             objLoader.setPath('data/');
             objLoader.load('rose+vase.obj', function (geometry) {
             geometry.scale.set(0.2, 0.2, 0.2);
-            geometry.position.set(0,0,0);
+            geometry.position.set(geometryGui.geometry_pos_x, geometryGui.geometry_pos_y, geometryGui.geometry_pos_z);
+            geometry.rotation.set(geometryGui.geometry_rotation_x,geometryGui.geometry_rotation_y,geometryGui.geometry_rotation_z); 
             geometry.castShadow = true;
             scene.add(geometry);
             myObjects[0]=geometry;
@@ -518,7 +524,8 @@ function main(){
             objLoader.setPath('data/');
             objLoader.load('soccerball.obj', function (geometry) {
             geometry.scale.set(3, 3, 3);
-            geometry.position.set(0,0,0);
+            geometry.position.set(geometryGui.geometry_pos_x, geometryGui.geometry_pos_y, geometryGui.geometry_pos_z);
+            geometry.rotation.set(geometryGui.geometry_rotation_x,geometryGui.geometry_rotation_y,geometryGui.geometry_rotation_z); 
             geometry.castShadow = true;
             scene.add(geometry);
             myObjects[0]=geometry;
