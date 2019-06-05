@@ -419,16 +419,12 @@ function main(){
             objLoader.load('al.obj', function (geometry) {
             geometry.scale.set(4.5, 4.5, 4.5);
             geometry.position.set( 0, 0, 0);
-            // geometry.castShadow = true;
-            // scene.add(geometry);
-            // myObjects[0]=geometry;
-            // geometry.castShadow = true;
+            geometry.castShadow = true;
+            scene.add(geometry);
+            myObjects[0]=geometry;
+            geometry.castShadow = true;
             })
         });
-        dol = new THREE.Mesh(geometry,material);
-        scene.add(dol);
-        myObjects[0]=dol;
-        dol.castShadow = true;
       }
     );
     sty.add(geometryGui,"dolphins").name("海豚").onChange(
@@ -443,16 +439,12 @@ function main(){
             objLoader.load('dolphins.obj', function (geometry) {
             geometry.scale.set(0.0001, 0.0001, 0.0001);
             geometry.position.set(0,0,0);
-            // geometry.castShadow = true;
-            // scene.add(geometry);
-            // myObjects[0]=geometry;
-            // geometry.castShadow = true;
+            geometry.castShadow = true;
+            scene.add(geometry);
+            myObjects[0]=geometry;
+            geometry.castShadow = true;
             })
         });
-        dol = new THREE.Mesh(geometry,material);
-        scene.add(dol);
-        myObjects[0]=dol;
-        dol.castShadow = true;
       }
     );
     sty.add(geometryGui,"flowers").name("鲜花").onChange(
