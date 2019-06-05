@@ -425,7 +425,7 @@ function main(){
             // geometry.castShadow = true;
             })
         });
-        dol = new THREE.Mesh(material,geometry);
+        dol = new THREE.Mesh(geometry,material);
         scene.add(dol);
         myObjects[0]=dol;
         dol.castShadow = true;
@@ -449,7 +449,7 @@ function main(){
             // geometry.castShadow = true;
             })
         });
-        dol = new THREE.Mesh(material,geometry);
+        dol = new THREE.Mesh(geometry,material);
         scene.add(dol);
         myObjects[0]=dol;
         dol.castShadow = true;
