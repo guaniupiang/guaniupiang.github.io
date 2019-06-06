@@ -527,7 +527,7 @@ function main(){
   /**
    * 清除模型，模型中有 group 和 scene,需要进行判断
    */
-  var myObjects = new Array();;
+  var myObjects = new Array();
   function clearScene(){
     // 从scene中删除模型并释放内存
     if(myObjects.length > 0){		
