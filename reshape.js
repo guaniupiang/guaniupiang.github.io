@@ -128,7 +128,7 @@ function main(){
           scene.add(spot);
           add_spotlight=true;
         }else{
-          clearSpot();
+          scene.remove(spot);
           add_spotlight=false;
         }
         information.innerHTML="<h3>if(add_spotlight==false){<br>scene.add(spot); add_spotlight=true;<br>}else{<br>scene.remove( spot ); add_spotlight=false;}</h3>";
@@ -581,26 +581,7 @@ function main(){
       }
     }
   }
-  var mySpot = new Array();
-  function clearSpot(){
-    // 从scene中删除模型并释放内存
-    if(mySpot.length > 0){		
-      for(var i = 0; i< mySpot.length; i++){
-        var currObj = mySpot[i];
-        
-        // 判断类型
-        if(currObj instanceof THREE.Scene){
-          var children = currObj.children;
-          for(var i = 0; i< children.length; i++){
-            deleteGroup(children[i]);
-          }	
-        }else{				
-          deleteGroup(currObj);
-        }
-        scene.remove(currObj);
-      }
-    }
-  }
+
   // 删除group，释放内存
   function deleteGroup(group) {
     //console.log(group);
@@ -693,7 +674,6 @@ function main(){
     spot.castShadow = true;		
     spot.shadow.mapSize.width = 2048;
     spot.shadow.mapSize.height = 2048;
-    mySpot[0]=spot;
     scene.add(spot);
     
     //添加环境三色光
