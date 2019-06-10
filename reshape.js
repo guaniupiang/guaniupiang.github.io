@@ -388,8 +388,8 @@ function main(){
             geometry.scale.set(3, 3, 3);
             geometry.position.set(5,-8,0);
             geometry.castShadow = true;
-            scene.add(geometry);
             myObjects[0]=geometry;
+	    scene.add(geometry);
             geometry.castShadow = true;
             })
         });
@@ -409,8 +409,8 @@ function main(){
             geometry.scale.set(4.5, 4.5, 4.5);
             geometry.position.set( 0, 0, 0);
             geometry.castShadow = true;
-            scene.add(geometry);
             myObjects[0]=geometry;
+	    scene.add(geometry);
             geometry.castShadow = true;
             })
         });
@@ -430,8 +430,8 @@ function main(){
             geometry.scale.set(0.05, 0.05, 0.05);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
-            scene.add(geometry);
             myObjects[0]=geometry;
+	    scene.add(geometry);
             geometry.castShadow = true;
             })
         });
@@ -451,8 +451,8 @@ function main(){
             geometry.scale.set(1.5, 1.5, 1.5);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
-            scene.add(geometry);
             myObjects[0]=geometry;
+	    scene.add(geometry);
             geometry.castShadow = true;
             })
         });
@@ -472,8 +472,8 @@ function main(){
             geometry.scale.set(0.3, 0.3, 0.3);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
-            scene.add(geometry);
             myObjects[0]=geometry;
+	    scene.add(geometry);
             geometry.castShadow = true;
             })
         });
@@ -493,8 +493,8 @@ function main(){
             geometry.scale.set(0.2, 0.2, 0.2);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
-            scene.add(geometry);
             myObjects[0]=geometry;
+	    scene.add(geometry);
             geometry.castShadow = true;
             })
         });
@@ -514,8 +514,8 @@ function main(){
             geometry.scale.set(3, 3, 3);
             geometry.position.set(0,0,0);
             geometry.castShadow = true;
-            scene.add(geometry);
             myObjects[0]=geometry;
+	    scene.add(geometry);
             geometry.castShadow = true;
             })
         });
@@ -582,8 +582,8 @@ function main(){
     geometry.position.set(geometryGui.geometry_pos_x, geometryGui.geometry_pos_y, geometryGui.geometry_pos_z);
     geometry.rotation.set(geometryGui.geometry_rotation_x,geometryGui.geometry_rotation_y,geometryGui.geometry_rotation_z);  
     geometry.castShadow = true;
-    scene.add(geometry);
     myObjects[0]=geometry;
+    scene.add(geometry);
   }
 
   //照相机
