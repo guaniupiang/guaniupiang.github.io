@@ -721,11 +721,11 @@ function main(){
     scene.add(ambientRed);
     ambientGreen=new THREE.AmbientLight( 0x00ff00 );
     ambientGreen.intensity=0;
-    myAmbient[0]=ambientGreen;
+    myAmbient[1]=ambientGreen;
     scene.add(ambientGreen);
     ambientBlue=new THREE.AmbientLight( 0x0000ff );
     ambientBlue.intensity=0;
-    myAmbient[0]=ambientBlue;
+    myAmbient[2]=ambientBlue;
     scene.add(ambientBlue);
   }
 
