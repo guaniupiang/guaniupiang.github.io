@@ -438,7 +438,7 @@ function main(){
         information.innerHTML="<h3>拖动鼠标左键/右键/中键可以旋转/移动/缩放模型，通过右侧控制面板点击参数类型滑动改变模型参数，<br>模型样式改变需要加载一定的时间</h3>";
       }
     );
-    sty.add(geometryGui,"flowers").name("鲜花").onChange(
+    /*sty.add(geometryGui,"flowers").name("鲜花").onChange(
       function(){
         clearScene();
         var mtlLoader = new THREE.MTLLoader();
@@ -458,7 +458,7 @@ function main(){
         });
         information.innerHTML="<h3>拖动鼠标左键/右键/中键可以旋转/移动/缩放模型，通过右侧控制面板点击参数类型滑动改变模型参数，<br>模型样式改变需要加载一定的时间</h3>";
       }
-    );
+    );*/
     sty.add(geometryGui,"porsche").name("跑车").onChange(
       function(){
         clearScene();
