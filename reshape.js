@@ -83,7 +83,7 @@ function main(){
             add_pointlight=true;
             point.position.set(  gui.light_pos_x,  gui.light_pos_y,  gui.light_pos_z );
           }else{
-            scene.remove( point );
+            clearPoint();
             add_pointlight=false;
           }
           information.innerHTML="<h3>if(add_pointlight==false){<br>scene.add( point ); add_pointlight=true;<br>}else{<br>scene.remove( point ); add_pointlight=false;}</h3>";
@@ -128,7 +128,7 @@ function main(){
           scene.add(spot);
           add_spotlight=true;
         }else{
-          scene.remove( spot );
+          clearSpot();
           add_spotlight=false;
         }
         information.innerHTML="<h3>if(add_spotlight==false){<br>scene.add(spot); add_spotlight=true;<br>}else{<br>scene.remove( spot ); add_spotlight=false;}</h3>";
@@ -192,9 +192,7 @@ function main(){
           scene.add(ambientBlue);
           add_ambientlight=true;
         }else{
-          scene.remove(ambientRed);
-          scene.remove(ambientGreen);
-          scene.remove(ambientBlue);
+          clearAmbient();
           add_ambientlight=false;
         }
         information.innerHTML="<h3>if(add_ambientlight==false){<br>scene.add(ambientRed);scene.add(ambientGreen);scene.add(ambientBlue);<br>add_ambientlight=true;<br>}else{<br>scene.remove(ambientRed);scene.remove(ambientGreen);scene.remove(ambientBlue);<br>add_ambientlight=false;}</h3>";
@@ -227,7 +225,7 @@ function main(){
         information.innerHTML="<h3>material.shininess = geometryGui.geometry_shininess;</h3>";
       }
     );
-    mat.addColor(geometryGui,"material_specular").name('高光颜色').onChange(
+    mat.addColor(geometryGui,"material_specular").name('镜面反射高光颜色').onChange(
       function(){
         material.specular.set( geometryGui.material_specular );
         information.innerHTML="<h3>material.specular.set( geometryGui.material_specular );</h3>";
@@ -561,7 +559,66 @@ function main(){
       }
     }
   }
-
+  var myPoint = new Array();
+  function clearPoint(){
+    // 从scene中删除模型并释放内存
+    if(myPoint.length > 0){		
+      for(var i = 0; i< myPoint.length; i++){
+        var currObj = myPoint[i];
+        
+        // 判断类型
+        if(currObj instanceof THREE.Scene){
+          var children = currObj.children;
+          for(var i = 0; i< children.length; i++){
+            deleteGroup(children[i]);
+          }	
+        }else{				
+          deleteGroup(currObj);
+        }
+        scene.remove(currObj);
+      }
+    }
+  }
+  var mySpot = new Array();
+  function clearSpot(){
+    // 从scene中删除模型并释放内存
+    if(mySpot.length > 0){		
+      for(var i = 0; i< mySpot.length; i++){
+        var currObj = mySpot[i];
+        
+        // 判断类型
+        if(currObj instanceof THREE.Scene){
+          var children = currObj.children;
+          for(var i = 0; i< children.length; i++){
+            deleteGroup(children[i]);
+          }	
+        }else{				
+          deleteGroup(currObj);
+        }
+        scene.remove(currObj);
+      }
+    }
+  }
+  var myAmbient = new Array();
+  function clearAmbient(){
+    // 从scene中删除模型并释放内存
+    if(myAmbient.length > 0){		
+      for(var i = 0; i< myAmbient.length; i++){
+        var currObj = myAmbient[i];
+        
+        // 判断类型
+        if(currObj instanceof THREE.Scene){
+          var children = currObj.children;
+          for(var i = 0; i< children.length; i++){
+            deleteGroup(children[i]);
+          }	
+        }else{				
+          deleteGroup(currObj);
+        }
+        scene.remove(currObj);
+      }
+    }
+  }
   // 删除group，释放内存
   function deleteGroup(group) {
     //console.log(group);
@@ -639,6 +696,7 @@ function main(){
     point.castShadow = true;
     point.shadow.mapSize.width = 2048;
     point.shadow.mapSize.height = 2048;	
+    myPoint[0]=point; 
     scene.add( point );
   }
 
@@ -653,17 +711,21 @@ function main(){
     spot.castShadow = true;		
     spot.shadow.mapSize.width = 2048;
     spot.shadow.mapSize.height = 2048;
+    mySpot[0]=spot;
     scene.add(spot);
     
     //添加环境三色光
     ambientRed=new THREE.AmbientLight( 0xff0000 );
     ambientRed.intensity=0;
+    myAmbient[0]=ambientRed;
     scene.add(ambientRed);
     ambientGreen=new THREE.AmbientLight( 0x00ff00 );
     ambientGreen.intensity=0;
+    myAmbient[0]=ambientGreen;
     scene.add(ambientGreen);
     ambientBlue=new THREE.AmbientLight( 0x0000ff );
     ambientBlue.intensity=0;
+    myAmbient[0]=ambientBlue;
     scene.add(ambientBlue);
   }
 
