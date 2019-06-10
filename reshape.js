@@ -42,7 +42,8 @@ function main(){
 
     geometryGui = {
       geometry_shininess:100, //高亮程度
-      material_color:0x000000, //放射光颜色
+      material_color:0x4499ff, //放射光颜色
+      material_emissive:0x000000, //放射光颜色
       material_specular:0x4499ff, //高光颜色
       material_wireframe:false, //线框模式是否开启
       geometry_radius:10, //圆环半径
@@ -232,10 +233,16 @@ function main(){
         information.innerHTML="<h3>material.specular.set( geometryGui.material_specular );</h3>";
       }
     );
-    mat.addColor(geometryGui,"material_color").name('放射光颜色').onChange(
+    mat.addColor(geometryGui,"material_color").name('漫反射光颜色').onChange(
       function(){
-        material.emissive.set( geometryGui.material_color );
+        material.color.set( geometryGui.material_color );
         information.innerHTML="<h3>material.emissive.set( geometryGui.material_color );</h3>";
+      }
+    );
+    mat.addColor(geometryGui,"material_emissive").name('放射光颜色').onChange(
+      function(){
+        material.emissive.set( geometryGui.material_emissive );
+        information.innerHTML="<h3>material.emissive.set( geometryGui.material_emissive );</h3>";
       }
     );
 
@@ -282,7 +289,8 @@ function main(){
         radius=geometryGui.geometry_size*10;
         tube=geometryGui.geometry_size*3;
         initGeometry();
-        material.emissive.set(geometryGui.material_color);
+	material.color.set(geometryGui.material_color);
+        material.emissive.set(geometryGui.material_emissive);
         information.innerHTML="<h3>var xformMatrix = new Float32Array([<br> Sx, 0.0, 0.0, 0.0,<br>0.0, Sy, 0.0, 0.0<br>0.0, 0.0, Sz, 0.0,<br>0.0, 0.0, 0.0, 1.0])</h3>";
       }
     );
@@ -300,8 +308,9 @@ function main(){
         material.wireframe = geometryGui.material_wireframe;
         material.shininess = geometryGui.geometry_shininess;
         material.specular.set( geometryGui.material_specular );
-        material.emissive.set( geometryGui.material_color );
-        information.innerHTML="<h3>scene.remove( geometry );<br>radius = geometryGui.geometry_radius; tube = geometryGui.geometry_tube;<br>radialSegments = geometryGui.geometry_radialSegments;<br>tubularSegments = geometryGui.geometry_tubularSegments;<br>arc = geometryGui.geometry_arc; initGeometry();<br>material.wireframe = geometryGui.material_wireframe;<br>material.shininess = geometryGui.geometry_shininess;<br>material.specular.set( geometryGui.material_specular );<br>material.emissive.set( geometryGui.material_color );</h3>";
+        material.color.set( geometryGui.material_color );
+	material.emissive.set( geometryGui.material_emissive );
+        information.innerHTML="<h3>scene.remove( geometry );<br>radius = geometryGui.geometry_radius; tube = geometryGui.geometry_tube;<br>radialSegments = geometryGui.geometry_radialSegments;<br>tubularSegments = geometryGui.geometry_tubularSegments;<br>arc = geometryGui.geometry_arc; initGeometry();<br>material.wireframe = geometryGui.material_wireframe;<br>material.shininess = geometryGui.geometry_shininess;<br>material.specular.set( geometryGui.material_specular );<br>material.color.set( geometryGui.material_color );<br>material.emissive.set( geometryGui.material_emissive );</h3>";
       }
     );
     wir.add(geometryGui,"geometry_radius",1,15).name('圆环半径').onChange(
@@ -311,8 +320,9 @@ function main(){
           radius = geometryGui.geometry_radius;
           initGeometry();
           material.wireframe=true;
-          material.emissive.set(geometryGui.material_color);
-          information.innerHTML="<h3>scene.remove( geometry );<br>radius = geometryGui.geometry_radius;<br>initGeometry();<br>material.wireframe = true;<br>material.emissive.set( geometryGui.material_color );</h3>";
+          material.color.set( geometryGui.material_color );
+	  material.emissive.set( geometryGui.material_emissive );
+          information.innerHTML="<h3>scene.remove( geometry );<br>radius = geometryGui.geometry_radius;<br>initGeometry();<br>material.wireframe = true;<br>material.color.set( geometryGui.material_color );<br>material.emissive.set( geometryGui.material_emissive );</h3>";
         }
       }
     );
@@ -323,8 +333,9 @@ function main(){
           tube = geometryGui.geometry_tube;
           initGeometry();
           material.wireframe = true;
-          material.emissive.set( geometryGui.material_color );
-          information.innerHTML="<h3>scene.remove( geometry );<br>tube = geometryGui.geometry_tube;<br>initGeometry();<br>material.wireframe = true;<br>material.emissive.set( geometryGui.material_color );</h3>";
+          material.color.set( geometryGui.material_color );
+	  material.emissive.set( geometryGui.material_emissive );
+          information.innerHTML="<h3>scene.remove( geometry );<br>tube = geometryGui.geometry_tube;<br>initGeometry();<br>material.wireframe = true;<br>material.color.set( geometryGui.material_color );<br>material.emissive.set( geometryGui.material_emissive );</h3>";
         }
       }
     );
@@ -335,8 +346,9 @@ function main(){
           radialSegments = geometryGui.geometry_radialSegments;
           initGeometry();
           material.wireframe=true;
-          material.emissive.set( geometryGui.material_color );
-          information.innerHTML="<h3>scene.remove( geometry );<br>radialSegments = geometryGui.geometry_radialSegments;<br>initGeometry();<br>material.wireframe = true;<br>material.emissive.set( geometryGui.material_color );</h3>";
+          material.color.set( geometryGui.material_color );
+	  material.emissive.set( geometryGui.material_emissive );
+          information.innerHTML="<h3>scene.remove( geometry );<br>radialSegments = geometryGui.geometry_radialSegments;<br>initGeometry();<br>material.wireframe = true;<br>material.color.set( geometryGui.material_color );<br>material.emissive.set( geometryGui.material_emissive );</h3>";
         }
       }
     );
@@ -347,8 +359,9 @@ function main(){
           tubularSegments = geometryGui.geometry_tubularSegments;
           initGeometry();
           material.wireframe = true;
-          material.emissive.set( geometryGui.material_color );
-          information.innerHTML="<h3>scene.remove( geometry );<br>tubularSegments = geometryGui.geometry_tubularSegments;<br>initGeometry();<br>material.wireframe = true;<br>material.emissive.set( geometryGui.material_color );</h3>";
+          material.color.set( geometryGui.material_color );
+	  material.emissive.set( geometryGui.material_emissive );
+          information.innerHTML="<h3>scene.remove( geometry );<br>tubularSegments = geometryGui.geometry_tubularSegments;<br>initGeometry();<br>material.wireframe = true;<br>material.color.set( geometryGui.material_color );<br>material.emissive.set( geometryGui.material_emissive );</h3>";
         }
       }
     );
@@ -359,8 +372,9 @@ function main(){
           arc = geometryGui.geometry_arc;
           initGeometry();
           material.wireframe = true;
-          material.emissive.set( geometryGui.material_color );
-          information.innerHTML="<h3>scene.remove( geometry );<br>arc = geometryGui.geometry_arc;<br>initGeometry();<br>material.wireframe = true;<br>material.emissive.set( geometryGui.material_color );</h3>";
+          material.color.set( geometryGui.material_color );
+	  material.emissive.set( geometryGui.material_emissive );
+          information.innerHTML="<h3>scene.remove( geometry );<br>arc = geometryGui.geometry_arc;<br>initGeometry();<br>material.wireframe = true;<br>material.color.set( geometryGui.material_color );<br>material.emissive.set( geometryGui.material_emissive );</h3>";
         }
       }
     );
