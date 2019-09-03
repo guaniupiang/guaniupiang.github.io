@@ -1,5 +1,4 @@
 # guaniupiang.github.io
-webgl
 欢迎访问guaniupiang的个人网页https://guaniupiang.github.io/
 点击个人网页上的webgl教学资源中的Light & Material，即可查看webgl案例，网页中的雪花场景也是用webgl编写。
 这个案例是本人毕业设计所做的内容，参照经典opengl案例，为了让这个经典的opengl案例方便大家查看学习，所以用webgl重写出来并稍加改进放在网页上实现交互式改变参数来获得可视化运行结果。
