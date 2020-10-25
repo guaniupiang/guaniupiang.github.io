@@ -163,8 +163,8 @@
 					spheres.push( mesh );
 				}
 				special = new THREE.Mesh( geometry, material );
-				special.position.set(-950,500,-80);
-				scene.add(special);
+				//special.position.set(-950,500,-80);
+				//scene.add(special);
 
 				var spriteGeometry = new THREE.BufferGeometry();
 				var vertices = [];
@@ -234,7 +234,7 @@
 
 			}
 		
-			var raycaster = new THREE.Raycaster();
+			/*var raycaster = new THREE.Raycaster();
 			var mouse = new THREE.Vector2();
 			var clickObjects=[];
 			clickObjects.push(special);
@@ -246,15 +246,15 @@
 				var intersects = raycaster.intersectObjects( clickObjects );
 				console.log(intersects);
 				if(intersects.length>0) {
-					var id = prompt("天青色等烟雨，而我在等蝴蝶飞过沧海","请输入通行ID");
-					if (id == "蝴蝶飞不过沧海"){
-						alert("他们猜 随便猜 不重要\n\n生日快乐啦\n今天要开心呦\nR U Ready?");
+					var id = prompt("天青色等烟雨，而我在等你","请输入通行ID");
+					if (id == ""){
+						alert("他们猜 随便猜 不重要\nR U Ready?");
 						window.location.href = "happybirthday.html"
 					}else{
 						alert("ID错误，验证失败");
 					}
 				}
-			}
+			}*/
 			
 			function onDocumentMouseMove( event ) {
 
